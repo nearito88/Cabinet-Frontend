@@ -1,12 +1,112 @@
-import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { Router, RouterOutlet, NavigationEnd } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { filter, take } from 'rxjs/operators';
+import { AuthService } from './auth.service';
+import { SidebarComponent } from './component/sidebar/sidebar.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, SidebarComponent],
+  template: `
+    @if (showApp) {
+      @if (showSidebar) {
+        <app-sidebar [isOpen]="isSidebarOpen" (toggleCollapse)="onToggleSidebar()"></app-sidebar>
+      }
+      <div class="main-content" [class.sidebar-collapsed]="!isSidebarOpen" [class.sidebar-visible]="showSidebar">
+        <router-outlet></router-outlet>
+      </div>
+    } @else {
+      <router-outlet></router-outlet>
+    }
+  `,
+  styles: [`
+    .main-content {
+      margin-left: 250px;
+      transition: margin-left 0.3s ease;
+      min-height: 100vh;
+      padding: 20px;
+      background-color: #f5f7fa;
+    }
+    
+    .sidebar-collapsed {
+      margin-left: 70px;
+    }
+    
+    @media (max-width: 991px) {
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .sidebar-collapsed {
+        margin-left: 0;
+      }
+    }
+  `]
 })
-export class AppComponent {
-  title = 'cabinet-frontend';
+export class AppComponent implements OnInit {
+  title = 'Medical Office';
+  isSidebarOpen = true;
+  showApp = false;
+  showSidebar = true;
+  private auth = inject(AuthService);
+  private router = inject(Router);
+
+  ngOnInit() {
+    // Check initial authentication state and handle sidebar visibility
+    this.auth.user$.pipe(take(1)).subscribe((user: any) => {
+      if (user) {
+        this.showApp = true;
+        this.handleAuthenticatedNavigation();
+        this.showSidebar = true; // Show sidebar for authenticated users
+      } else {
+        this.handleUnauthenticatedNavigation();
+        this.showSidebar = false; // Hide sidebar for unauthenticated users
+      }
+    });
+
+    // Handle route changes
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      // No need to update sidebar visibility here
+    });
+  }
+
+  private checkAuthState() {
+    this.auth.user$.pipe(take(1)).subscribe((user: any) => {
+      if (user) {
+        this.showApp = true;
+        this.handleAuthenticatedNavigation();
+      } else {
+        this.handleUnauthenticatedNavigation();
+      }
+    });
+  }
+
+
+  onToggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
+
+  private handleAuthenticatedNavigation() {
+    const currentUrl = this.router.url;
+    if (['/login', '/register', '/forgot-password', '/'].includes(currentUrl)) {
+      this.router.navigate(['/dashboard']);
+    }
+    this.showApp = true;
+  }
+
+  private handleUnauthenticatedNavigation() {
+    const currentUrl = this.router.url;
+    const publicRoutes = ['/login', '/register', '/forgot-password', '/'];
+    
+    if (!publicRoutes.some(route => currentUrl.startsWith(route))) {
+      this.router.navigate(['/login'], { 
+        queryParams: { returnUrl: currentUrl }
+      });
+    }
+    this.showApp = false;
+  }
 }

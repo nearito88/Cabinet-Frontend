@@ -1,0 +1,56 @@
+<div class="admin-layout">
+  <!-- Sidebar Overlay -->
+  <div 
+    *ngIf="showOverlay" 
+    class="sidebar-overlay"
+    [class.active]="isSidebarActive"
+    (click)="toggleSidebar()">
+  </div>
+  
+  <!-- Sidebar -->
+  <app-sidebar 
+    [isOpen]="isSidebarActive"
+    [isCollapsed]="isSidebarCollapsed"
+    (toggleCollapse)="onSidebarToggleCollapse()"
+    [class.active]="isSidebarActive"
+    [class.collapsed]="isSidebarCollapsed">
+  </app-sidebar>
+  
+  <!-- Main Content -->
+  <div 
+    class="main-content" 
+    [class.sidebar-open]="isSidebarActive"
+    [class.sidebar-collapsed]="isSidebarCollapsed">
+    <!-- Top Navigation -->
+    <header class="top-nav">
+      <div class="user-actions">
+        <button class="notification-btn" aria-label="Notifications">
+          <i class="fas fa-bell"></i>
+          <span class="badge">3</span>
+        </button>
+        <div class="user-profile">
+          <img src="assets/images/avatar.png" alt="User Avatar" class="avatar">
+          <span class="user-name">Dr. Fatima Zahra</span>
+          <i class="fas fa-chevron-down"></i>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Page Content -->
+    <main>
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+  
+  <!-- Overlay for mobile sidebar -->
+  <!-- Mobile sidebar overlay -->
+  <div 
+    class="sidebar-overlay" 
+    [class.active]="showOverlay" 
+    (click)="closeSidebar()"
+    role="button"
+    aria-label="Close sidebar"
+    tabindex="0"
+    #sidebarOverlay>
+  </div>
+</div>

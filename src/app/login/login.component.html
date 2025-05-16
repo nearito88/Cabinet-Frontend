@@ -1,0 +1,73 @@
+<section class="vh-100 gradient-custom">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
+
+            <div class="mb-md-5 mt-md-4 pb-5">
+
+              <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+              <p class="text-white-50 mb-5">Please enter your credentials</p>
+
+              <div *ngIf="errorMessage" class="alert alert-danger mb-3">{{ errorMessage }}</div>
+
+              <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+                <div data-mdb-input-init class="form-outline form-white mb-4">
+                  <input 
+                    type="email" 
+                    id="typeEmailX" 
+                    class="form-control form-control-lg" 
+                    placeholder="Email" 
+                    [(ngModel)]="username" 
+                    name="username" 
+                    required 
+                    [disabled]="isLoading"
+                  />
+                </div>
+
+                <div class="form-outline form-white mb-4 password-toggle-container">
+                  <input 
+                    [type]="passwordVisible ? 'text' : 'password'" 
+                    id="typePasswordX" 
+                    class="form-control form-control-lg" 
+                    placeholder="Password" 
+                    [(ngModel)]="password" 
+                    name="password" 
+                    required
+                    [disabled]="isLoading"
+                  />
+                  <button 
+                    type="button" 
+                    class="btn btn-sm btn-outline-light password-toggle-button"
+                    (click)="togglePasswordVisibility()"
+                    [disabled]="isLoading"
+                  >
+                    <i [ngClass]="passwordVisible ? 'fas fa-eye-slash' : 'fas fa-eye'"></i>
+                  </button>
+                </div>
+
+                <button 
+                  data-mdb-button-init 
+                  data-mdb-ripple-init 
+                  class="btn btn-outline-light btn-lg px-5"
+                  type="submit" 
+                  [disabled]="loginForm.invalid || isLoading"
+                >
+                  <span *ngIf="!isLoading; else loading">Sign In</span>
+                  <ng-template #loading>
+                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                    <span class="visually-hidden">Loading...</span>
+                  </ng-template>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

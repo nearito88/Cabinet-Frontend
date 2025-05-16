@@ -1,0 +1,133 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>Dashboard</h1>
+    <div class="header-actions">
+      <button mat-button color="primary" class="action-button">
+        <mat-icon>refresh</mat-icon> Refresh
+      </button>
+      <button mat-raised-button color="primary" [routerLink]="'/appointments/new'" class="new-appointment-button">
+        <mat-icon>add</mat-icon> New Appointment
+      </button>
+    </div>
+  </div>
+
+  <!-- Stats Grid -->
+  <div class="stats-grid">
+    <div *ngFor="let card of statsCards" class="stat-card" [style.border-left-color]="card.color">
+      <div class="stat-card-content">
+        <div class="stat-card-text">
+          <div class="stat-card-title">{{card.title}}</div>
+          <div class="stat-card-value">{{card.value | number}}</div>
+          <div class="stat-card-trend" [class.negative]="!card.trend.isPositive">
+            <mat-icon>{{card.trend.isPositive ? 'trending_up' : 'trending_down'}}</mat-icon>
+            {{card.trend.value}}
+          </div>
+        </div>
+        <div class="stat-card-icon">
+          <mat-icon>{{card.icon}}</mat-icon>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="dashboard-content">
+    <!-- Left Column -->
+    <div class="dashboard-column">
+      <!-- Appointments -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Today's Appointments</h2>
+          <a [routerLink]="'/appointments'" class="view-all">
+            View All
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+        <div class="card-content">
+          <div *ngFor="let appt of recentAppointments" class="appointment-item">
+            <div class="appointment-time">
+              {{appt.time}}
+              <span class="status-badge" [ngClass]="'status-' + appt.status.toLowerCase()">
+                {{appt.status | titlecase}}
+              </span>
+            </div>
+            <div class="appointment-details">
+              <div class="appointment-title">{{appt.patient.name}}</div>
+              <div class="appointment-patient">
+                <span>{{appt.type}}</span>
+                <span>•</span>
+                <span>Dr. {{appt.doctor}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Patients -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Recent Patients</h2>
+          <a [routerLink]="'/patients'" class="view-all">
+            View All
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+        <div class="card-content">
+          <div *ngFor="let patient of recentPatients" [routerLink]="['/patients', patient.id]" class="patient-item">
+            <div class="patient-avatar">
+              {{patient.avatar}}
+            </div>
+            <div class="patient-details">
+              <div class="patient-name">{{patient.name}}</div>
+              <div class="patient-email">Last visit: {{getRelativeTime(patient.lastVisit)}}</div>
+            </div>
+            <mat-icon>chevron_right</mat-icon>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="dashboard-column">
+      <!-- Quick Actions -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Quick Actions</h2>
+        </div>
+        <div class="card-content">
+          <div class="quick-actions">
+            <button *ngFor="let action of quickActions" [routerLink]="action.route" class="quick-action">
+              <mat-icon>{{action.icon}}</mat-icon>
+              <span>{{action.label}}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Invoice Status -->
+      <div class="card">
+        <div class="card-header">
+          <h2 class="card-title">Invoice Status</h2>
+          <a [routerLink]="'/invoices'" class="view-all">
+            View All
+            <mat-icon>chevron_right</mat-icon>
+          </a>
+        </div>
+        <div class="card-content" style="height: 300px;">
+          <div class="chart-container">
+            <canvas baseChart
+              [data]="pieChartData"
+              [type]="pieChartType"
+              [options]="pieChartOptions">
+            </canvas>
+          </div>
+          <div *ngIf="pieChartData.datasets[0].data.length === 0" class="no-data">
+            <mat-icon>pie_chart</mat-icon>
+            <p>No invoice data available</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

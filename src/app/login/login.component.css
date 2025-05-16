@@ -1,0 +1,99 @@
+.gradient-custom {
+    /* Fallback for old browsers */
+    background: #1bd5db;
+  
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+  
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgb(16, 165, 202), rgba(37, 117, 252, 1));
+  }
+  
+  .card.bg-dark.text-white {
+    background-color: rgba(59, 57, 57, 0.8) !important; /* Slightly transparent dark background */
+    border-radius: 1rem;
+  }
+  
+  .form-control.form-control-lg {
+    background-color: rgba(50, 50, 50, 0.7); /* Darker input background */
+    color: #eee;
+    border: 1px solid rgba(80, 80, 80, 0.7);
+    border-radius: 0.5rem;
+  }
+  
+  .form-control.form-control-lg::placeholder {
+    color: #bbb;
+  }
+  
+  .form-control.form-control-lg:focus {
+    background-color: rgba(70, 70, 70, 0.7);
+    border-color: #64b5f6; /* Example focus color */
+    box-shadow: 0 0 0 0.2rem rgba(100, 181, 246, 0.25); /* Subtle focus shadow */
+    color: #eee;
+  }
+  
+  .btn.btn-outline-light.btn-lg.px-5 {
+    border-color: #eee;
+    color: #eee;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btn.btn-outline-light.btn-lg.px-5:hover {
+    background-color: #eee;
+    color: #333;
+  }
+  
+  .form-outline.form-white.mb-4 label {
+    color: #ccc;
+  }
+  
+  .text-white-50 {
+    color: rgba(255, 255, 255, 0.7) !important;
+  }
+  
+  .mb-md-5 {
+    margin-bottom: 3rem !important;
+  }
+  
+  .mt-md-4 {
+    margin-top: 1.5rem !important;
+  }
+  
+  .pb-5 {
+    padding-bottom: 2rem !important;
+  }
+  
+  .mb-2 {
+    margin-bottom: 0.75rem !important;
+  }
+  
+  .small.mb-5 {
+    margin-bottom: 1.5rem !important;
+  }
+  .password-toggle-container {
+    position: relative; /* Needed for absolute positioning of the button */
+  }
+  
+  .password-toggle-container input[type="password"],
+  .password-toggle-container input[type="text"] {
+    padding-right: 40px; /* Make space for the icon */
+  }
+  
+  .password-toggle-button {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust spacing from the right */
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #ccc; /* Adjust icon color */
+    cursor: pointer;
+    padding: 5px;
+    outline: none;
+    z-index: 10; /* Ensure the icon is above the input */
+  }
+  
+  .password-toggle-button:hover {
+    color: #eee;
+  }

@@ -1,0 +1,72 @@
+<h2>Add New Patient</h2>
+
+<div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+<form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+  <div>
+    <label for="name">Name:</label>
+    <input type="text" id="name" formControlName="name" required>
+    <div *ngIf="patientForm.controls['name'].invalid && (patientForm.controls['name'].dirty || patientForm.controls['name'].touched)" class="error">
+      Name is required.
+    </div>
+  </div>
+
+  <div>
+    <label for="CIN">CIN:</label>
+    <input type="text" id="CIN" formControlName="CIN" required pattern="^[0-9]{8}$">
+    <div *ngIf="patientForm.controls['CIN'].invalid && (patientForm.controls['CIN'].dirty || patientForm.controls['CIN'].touched)" class="error">
+      <div *ngIf="patientForm.controls['CIN'].errors?.['required']">CIN is required.</div>
+      <div *ngIf="patientForm.controls['CIN'].errors?.['pattern']">CIN must be 8 digits.</div>
+    </div>
+  </div>
+
+  <div>
+    <label for="disease">Disease:</label>
+    <input type="text" id="disease" formControlName="disease">
+  </div>
+
+  <div>
+    <label for="insurance">Insurance:</label>
+    <input type="text" id="insurance" formControlName="insurance">
+  </div>
+
+  <div>
+    <label for="email">Email:</label>
+    <input type="email" id="email" formControlName="email">
+    <div *ngIf="patientForm.controls['email'].invalid && (patientForm.controls['email'].dirty || patientForm.controls['email'].touched)" class="error">
+      <div *ngIf="patientForm.controls['email'].errors?.['email']">Invalid email format.</div>
+    </div>
+  </div>
+
+  <div>
+    <label for="phone">Phone:</label>
+    <input type="text" id="phone" formControlName="phone">
+  </div>
+
+  <div>
+    <label for="age">Age:</label>
+    <input type="number" id="age" formControlName="age" pattern="^[0-9]+$">
+    <div *ngIf="patientForm.controls['age'].invalid && (patientForm.controls['age'].dirty || patientForm.controls['age'].touched)" class="error">
+      Age must be a number.
+    </div>
+  </div>
+
+  <div>
+    <label for="dateJoined">Date Joined:</label>
+    <input type="date" id="dateJoined" formControlName="dateJoined">
+  </div>
+
+  <div>
+    <label for="documents">Documents:</label>
+    <input type="text" id="documents" formControlName="documents">
+  </div>
+
+  <div>
+    <label for="medicalHistory">Medical History:</label>
+    <input type="text" id="medicalHistory" formControlName="medicalHistory">
+  </div>
+
+  <button type="submit" [disabled]="patientForm.invalid">Add Patient</button>
+  <button type="button" (click)="goBack()">Cancel</button>
+</form>

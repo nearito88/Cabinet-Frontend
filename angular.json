@@ -23,13 +23,28 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "/assets/"
               }
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css",
+              "src/assets/css/bootstrap.css",
+              "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css",
+              "src/assets/css/project-style.css",
+              "src/assets/css/responsive.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/assets/sidebar/css/style.css",
+              "src/assets/sidebar/css/bootstrap/_media.css",
+              "src/assets/sidebar/css/bootstrap.min.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "src/assets/sidebar/js/jquery.min.js",
+              "src/assets/sidebar/js/popper.js",
+              "src/assets/sidebar/js/bootstrap.min.js",
+              "src/assets/sidebar/js/main.js"
+            ],
             "server": "src/main.server.ts",
             "outputMode": "server",
             "ssr": {
@@ -86,16 +101,26 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "src/assets",
+                "output": "/assets/"
               }
             ],
             "styles": [
-              "src/styles.css"
+              "@angular/material/prebuilt-themes/azure-blue.css",
+              "src/styles.css",
+              "src/assets/css/bootstrap.css",
+              "src/assets/css/font-awesome.min.css",
+              "src/assets/css/style.css",
+              "src/assets/css/responsive.css",
+              "node_modules/bootstrap/dist/css/bootstrap.min.css"
             ],
             "scripts": []
           }
         }
       }
     }
+  },
+  "cli": {
+    "analytics": "a6ef66f2-5e1a-4cfe-a77d-e1bf1dd55c36"
   }
 }

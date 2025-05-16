@@ -1,0 +1,82 @@
+<div class="sidebar" [class.active]="isOpen" [class.collapsed]="isCollapsed">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <div class="logo-container">
+      <i class="fas fa-clinic-medical logo-icon"></i>
+      <h2 class="logo-text" *ngIf="!isCollapsed">Cabinet Médical</h2>
+    </div>
+    <button class="sidebar-toggle" (click)="toggleCollapse.emit()">
+      <i [class]="isCollapsed ? 'fas fa-chevron-right' : 'fas fa-chevron-left'"></i>
+    </button>
+  </div>
+  
+  <!-- User Profile -->
+  <div class="user-profile" *ngIf="!isCollapsed && user">
+    <div class="avatar">
+      <i class="fas fa-user-md"></i>
+    </div>
+    <div class="user-info">
+      <h4 class="user-name">{{ user.displayName || 'Utilisateur' }}</h4>
+      <p class="user-email">{{ user.email }}</p>
+    </div>
+  </div>
+  
+  <!-- Navigation Menu -->
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      @for (item of navigationItems; track item.title) {
+        <li class="nav-item" 
+            [class.active]="item.isActive"
+            [class.has-children]="item.children?.length"
+            [class.expanded]="item.isExpanded"
+            [class.logout-item]="item.class === 'logout'">
+          <a (click)="toggleItem(item, $event)" 
+             class="nav-link" 
+             [class.logout]="item.class === 'logout'"
+             [class.active]="item.isActive"
+             [routerLink]="item.class === 'logout' ? null : item.route"
+             [routerLinkActive]="item.class === 'logout' ? '' : 'active'"
+             [routerLinkActiveOptions]="{exact: item.route === '/panel'}">
+            <i [class]="item.icon"></i>
+            <span class="nav-text" *ngIf="!isCollapsed">{{ item.title }}</span>
+            @if (item.badge && !isCollapsed) {
+              <span class="badge">{{ item.badge }}</span>
+            }
+            <!-- Dropdown arrow removed -->
+          </a>
+          
+          @if (item.children?.length && (item.isExpanded || !isCollapsed)) {
+            <ul class="submenu" [class.collapsed]="isCollapsed">
+              @for (child of item.children; track child.title) {
+                <li [class.active]="child.isActive">
+                  <a (click)="toggleItem(child, $event)" 
+                     [routerLink]="child.route"
+                     [class.active]="child.isActive"
+                     routerLinkActive="active"
+                     [routerLinkActiveOptions]="{exact: true}">
+                    <i [class]="child.icon"></i>
+                    <span class="submenu-text" *ngIf="!isCollapsed">{{ child.title }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+  
+  <!-- Sidebar Footer -->
+  <div class="sidebar-footer" *ngIf="!isCollapsed">
+    <div class="theme-switcher">
+      <i class="fas fa-moon"></i>
+      <span>Mode sombre</span>
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+      </label>
+    </div>
+    <p class="app-version">v1.0.0</p>
+    <p class="copyright">&copy; {{ currentYear }} Cabinet Médical</p>
+  </div>
+</div>
