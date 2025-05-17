@@ -7,7 +7,7 @@ import { Subscription, filter } from 'rxjs';
 // Icons
 import { faSignOutAlt, faUser, faCog, faCalendarAlt, faUserFriends, faHome, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
 
-interface NavItem {
+export interface NavItem {
   title: string;
   icon: string;
   route: string;
@@ -60,51 +60,59 @@ export class SidebarComponent implements OnInit, OnDestroy {
       title: 'Dashboard',
       icon: 'fas fa-tachometer-alt',
       route: '/dashboard',
-      isActive: false
+      isActive: false,
+      isExpanded: false
     },
     {
       title: 'Appointments',
       icon: 'fas fa-calendar-check',
       route: '/panel/appointments',
       isActive: false,
+      isExpanded: false,
       children: [
         {
           title: 'Appointment List',
           route: '/panel/appointments',
           icon: 'fas fa-list',
-          isActive: false
+          isActive: false,
+          isExpanded: false
         },
         {
           title: 'Calendar',
           route: '/panel/appointments/calendar',
           icon: 'fas fa-calendar-day',
-          isActive: false
+          isActive: false,
+          isExpanded: false
         },
         {
           title: 'New Appointment',
           route: '/panel/appointments/new',
           icon: 'fas fa-plus',
-          isActive: false
+          isActive: false,
+          isExpanded: false
         }
       ]
     },
     {
       title: 'Patients',
       icon: 'fas fa-user-injured',
-      route: '/patient',
+      route: '/patients',
       isActive: false,
+      isExpanded: false,
       children: [
         {
-          title: 'Patient List',
-          route: '/patient',
+          title: 'List Patients',
+          route: '/patients/list',
           icon: 'fas fa-list',
-          isActive: false
+          isActive: false,
+          isExpanded: false
         },
         {
-          title: 'New Patient',
-          route: '/patient/new',
+          title: 'Add Patient',
+          route: '/patients/add',
           icon: 'fas fa-plus',
-          isActive: false
+          isActive: false,
+          isExpanded: false
         }
       ]
     },
@@ -290,7 +298,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   private setupAuthListener(): void {
     const authSub = this.authService.user$.pipe(
-      filter(user => user !== undefined) // Skip initial undefined state
+      filter(user => user !== undefined)
     ).subscribe({
       next: (user: any) => {
         this.user = user ? this.authService.getCurrentUser() : null;
@@ -300,7 +308,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
         this.user = null;
       }
     });
-  
+
     this.subscriptions.add(authSub);
   }
 
@@ -327,24 +335,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
       window.addEventListener('resize', () => this.checkIfMobile());
     }
     
-    // Set up route tracking first
     this.setupRouteTracking();
-    
-    // Then set up navigation items
     this.setupNavigationItems();
-  
-    // Close sidebar on mobile when route changes
+
     const routeSub = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd && this.isBrowser && this.isMobile)
     ).subscribe(() => {
       this.isOpen = false;
     });
-  
+
     this.subscriptions.add(routeSub);
   }
 
   ngOnDestroy(): void {
-    // Clean up all subscriptions
     this.subscriptions.unsubscribe();
     if (this.isBrowser) {
       window.removeEventListener('resize', () => this.checkIfMobile());
@@ -355,20 +358,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
     this.isMobile = window.innerWidth < 992;
   }
 
-  // Check if current route is active
-  isRouteActive(route: string): boolean {
+  private isRouteActive(route: string): boolean {
     if (!route) return false;
 
-    const currentUrl = this.router.url.split('?')[0]; // Remove query params
-
-    // Exact match
+    const currentUrl = this.router.url.split('?')[0];
     if (currentUrl === route) {
       return true;
     }
 
-    // Check if current URL starts with the route (for parent routes)
     if (route !== '/' && currentUrl.startsWith(route)) {
-      // Make sure we're not matching partial segments
       const nextChar = currentUrl.length > route.length ? currentUrl[route.length] : '';
       return nextChar === '/' || nextChar === '' || nextChar === '?';
     }
@@ -377,10 +375,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private setupRouteTracking(): void {
-    // Initial update
     this.updateActiveStates();
 
-    // Subscribe to route changes
     const routeSub = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe(() => {
@@ -391,43 +387,33 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   private setupNavigationItems(): void {
-    // Just subscribe to auth state changes without taking any action
-    // The auth guard will handle route protection
     const authSub = this.authService.isAuthenticated$.pipe(
-      filter(isAuthenticated => isAuthenticated !== null) // Skip initial null
+      filter(isAuthenticated => isAuthenticated !== null)
     ).subscribe(() => {
-      // Navigation is now handled by the auth guard
-      // We don't need to do anything here
+      // Navigation is handled by auth guard
     });
-  
+
     this.subscriptions.add(authSub);
   }
+
   private updateActiveStates(): void {
-    const currentRoute = this.router.url.split('?')[0]; // Remove query params
+    const currentRoute = this.router.url.split('?')[0];
 
     this.navigationItems.forEach(item => {
-      // Reset active states
       item.isActive = false;
-
-      // Check if the current route matches the item's route
       if (item.route && this.isRouteActive(item.route)) {
         item.isActive = true;
       }
 
-      // Check children if they exist
       if (item.children) {
         let hasActiveChild = false;
-
         item.children.forEach(child => {
           child.isActive = false;
-
           if (child.route && this.isRouteActive(child.route)) {
             child.isActive = true;
             hasActiveChild = true;
           }
         });
-
-        // Expand parent if any child is active
         item.isExpanded = hasActiveChild || (item.isExpanded && item.children.length > 0);
       }
     });
@@ -438,7 +424,36 @@ export class SidebarComponent implements OnInit, OnDestroy {
     event.stopPropagation();
 
     if (item.children && item.children.length) {
+      // Toggle this item's expanded state
       item.isExpanded = !item.isExpanded;
+      
+      // If expanding, make sure parent is also expanded
+      if (item.isExpanded) {
+        const parent = this.navigationItems.find(navItem => 
+          navItem.children?.some(child => child === item)
+        );
+        if (parent) {
+          parent.isExpanded = true;
+        }
+        // Expand all children
+        item.children.forEach(child => {
+          if (child.children?.length) {
+            child.isExpanded = true;
+          }
+        });
+      }
+      // If collapsing, collapse all children
+      else {
+        const collapseChildren = (items: NavItem[]) => {
+          items.forEach(child => {
+            child.isExpanded = false;
+            if (child.children) {
+              collapseChildren(child.children);
+            }
+          });
+        };
+        collapseChildren(item.children);
+      }
     } else {
       if (item.route === '/logout') {
         this.logout();
@@ -450,7 +465,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   get sidebarClasses() {
     return {
-      'sidebar': true,
       'active': this.isOpen,
       'collapsed': this.isCollapsed
     };
@@ -459,16 +473,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   onToggleCollapse(event: Event) {
     event.preventDefault();
     event.stopPropagation();
-    this.toggleCollapse.emit();
     this.isOpen = !this.isOpen;
+    this.toggleCollapse.emit();
   }
 
-  navigate(route: string): void {
+  navigate(route: string) {
     this.router.navigate([route]);
-    // Close sidebar on mobile after navigation
-    if (this.isBrowser) {
-      this.isOpen = false;
-    }
   }
 
   @HostListener('window:resize', ['$event'])
@@ -481,4 +491,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       }
     }
   }
+} // End of SidebarComponent class
+
+// Export the NavItem interface
+export interface NavItem {
+  title: string;
+  icon: string;
+  route: string;
+  badge?: number;
+  children?: NavItem[];
+  isExpanded?: boolean;
+  class?: string;
+  isActive?: boolean;
 }

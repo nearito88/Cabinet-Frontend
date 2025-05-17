@@ -7,6 +7,7 @@ import { AuthGuard } from './auth.guard';
 import { PatientsListComponent } from './component/patients/patients-list/patients-list.component';
 import { PatientFormComponent } from './component/patients/patient-form/patient-form.component';
 import { PatientDetailComponent } from './component/patients/patient-detail/patient-detail.component';
+import { SidebarComponent } from './component/sidebar/sidebar.component';
 
 // Public routes (no authentication required)
 export const publicRoutes: Routes = [
@@ -24,7 +25,7 @@ export const publicRoutes: Routes = [
     path: 'login',
     component: LoginComponent,
     title: 'Login - Medical Office'
-  }
+  },
 ];
 
 // Protected routes (require authentication)

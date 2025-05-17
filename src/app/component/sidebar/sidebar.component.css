@@ -65,18 +65,77 @@
 /* Submenu styles */
 .submenu {
   padding-left: 1.5rem;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
+  display: none;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.nav-item.expanded .submenu {
+  display: block !important;
+  opacity: 1;
+  visibility: visible !important;
 }
 
 .submenu.collapsed {
-  padding: 0;
   max-height: 0 !important;
+  display: none !important;
+  visibility: hidden !important;
 }
 
-.submenu.expanded {
-  max-height: 500px;
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+}
+
+.dropdown-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.submenu li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  position: relative;
+}
+
+.submenu li a {
+  padding: 0.5rem 1rem 0.5rem 2.5rem !important;
+  font-size: 0.875rem !important;
+  color: #a0aec0;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  width: 100%;
+  position: relative;
+}
+
+.submenu li a:hover,
+.submenu li a.active {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.submenu li a i {
+  margin-right: 0.5rem;
+  width: 1rem;
+  text-align: center;
+}
+
+.submenu li .dropdown-arrow {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+  position: absolute;
+  right: 1rem;
+}
+
+.submenu li .dropdown-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+.submenu .submenu-text {
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+  flex: 1;
 }
 
 .submenu li a {
@@ -208,11 +267,13 @@
 .nav-link {
   display: flex;
   align-items: center;
-  padding: 0.75rem 1.5rem;
-  color: #cbd5e0;
+  padding: 0.75rem 1rem;
+  color: var(--text-color);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  white-space: nowrap;
   position: relative;
+  justify-content: space-between;
   border-left: 3px solid transparent;
   font-size: 0.9375rem;
   cursor: pointer;
