@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, HostListener, inject, OnDestroy
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../auth.service';
-import { Subscription, filter } from 'rxjs';
+import { Subscription, filter, take } from 'rxjs';
 
 // Icons
 import { faSignOutAlt, faUser, faCog, faCalendarAlt, faUserFriends, faHome, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -16,6 +16,7 @@ export interface NavItem {
   isExpanded?: boolean;
   class?: string;
   isActive?: boolean;
+  allowedRoles?: string[];
 }
 
 @Component({
@@ -37,6 +38,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   isMobile = false;
   user: any = null;
+  userRole: string | null = null; // Declare userRole property
   private subscriptions = new Subscription();
   isMobileMenuOpen: boolean = false;
   currentYear: number = new Date().getFullYear();
@@ -306,6 +308,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       error: (error: any) => {
         console.error('Error in auth listener:', error);
         this.user = null;
+        this.userRole = null;
       }
     });
 
@@ -337,7 +340,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
     
     this.setupRouteTracking();
     this.setupNavigationItems();
+    
+    // Initialize user and user claims subscriptions
+    this.subscribeToUser();
+    this.subscribeToUserClaims();
 
+    // Handle route changes
     const routeSub = this.router.events.pipe(
       filter(event => event instanceof NavigationEnd && this.isBrowser && this.isMobile)
     ).subscribe(() => {
@@ -345,6 +353,34 @@ export class SidebarComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.add(routeSub);
+  }
+
+  private subscribeToUser(): void {
+    const userSub = this.authService.user$.pipe(
+      filter(user => user !== undefined)
+    ).subscribe({
+      next: (user: any) => {
+        this.user = user ? this.authService.getCurrentUser() : null;
+      },
+      error: (error: any) => {
+        console.error('Error in user listener:', error);
+        this.user = null;
+      }
+    });
+    this.subscriptions.add(userSub);
+  }
+
+  private subscribeToUserClaims(): void {
+    const claimsSub = this.authService.userClaims$.subscribe(claims => {
+      // The auth service is sending the full decoded token object
+      // The role is directly in the claims object
+      this.userRole = claims?.role || null;
+      console.log('User role in Sidebar:', this.userRole);
+      console.log('Full Claims Object in Sidebar:', claims); 
+      // Update navigation items based on role
+      this.updateNavigationItems();
+    });
+    this.subscriptions.add(claimsSub);
   }
 
   ngOnDestroy(): void {
@@ -417,6 +453,19 @@ export class SidebarComponent implements OnInit, OnDestroy {
         item.isExpanded = hasActiveChild || (item.isExpanded && item.children.length > 0);
       }
     });
+  }
+
+  private updateNavigationItems(): void {
+    // Update visibility of navigation items based on user role
+    if (this.userRole) {
+      // You can implement specific visibility rules here based on role
+      // For example:
+      // if (this.userRole === 'admin') {
+      //   // Show all items
+      // } else if (this.userRole === 'doctor') {
+      //   // Show doctor-specific items
+      // }
+    }
   }
 
   toggleItem(item: NavItem, event: Event): void {

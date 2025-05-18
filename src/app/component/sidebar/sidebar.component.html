@@ -16,48 +16,55 @@
     <div class="user-info">
       <h4 class="user-name">{{ user.displayName || 'Utilisateur' }}</h4>
       <p class="user-email">{{ user.email }}</p>
+      <p class="user-role" *ngIf="userRole">
+        ({{ userRole }})
+      </p>
     </div>
   </div>
 
   <nav class="sidebar-nav">
     <ul class="nav-list">
       @for (item of navigationItems; track item.title) {
-        <li class="nav-item"
-            [class.active]="item.isActive"
-            [class.has-children]="item.children?.length"
-            [class.expanded]="item.isExpanded"
-            [class.logout-item]="item.class === 'logout'">
-          <a (click)="$event.stopPropagation(); toggleItem(item, $event)"
-             class="nav-link"
-             [class.logout]="item.class === 'logout'"
-             [class.active]="item.isActive"
-             [routerLink]="item.children?.length ? null : item.route"
-             routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: item.route === '/panel'}">
-            <i [class]="item.icon"></i>
-            <span class="nav-text" *ngIf="!isCollapsed">{{ item.title }}</span>
-            @if (item.badge && !isCollapsed) {
-              <span class="badge">{{ item.badge }}</span>
-            }
-            @if (item.children?.length && !isCollapsed) {
-              <i class="fas fa-chevron-down dropdown-arrow" [class.expanded]="item.isExpanded"></i>
-            }
-          </a>
-          <ul class="submenu">
-            @for (child of item.children; track child.title) {
-              <li [class.active]="child.isActive">
-                <a (click)="$event.stopPropagation()"
-                   [routerLink]="child.route"
-                   [class.active]="child.isActive"
-                   routerLinkActive="active"
-                   [routerLinkActiveOptions]="{exact: true}">
-                  <i [class]="child.icon"></i>
-                  <span class="submenu-text" *ngIf="!isCollapsed">{{ child.title }}</span>
-                </a>
-              </li>
-            }
-          </ul>
-        </li>
+        @if (!item.allowedRoles || !userRole || item.allowedRoles.includes(userRole)) {
+          <li class="nav-item"
+              [class.active]="item.isActive"
+              [class.has-children]="item.children?.length"
+              [class.expanded]="item.isExpanded"
+              [class.logout-item]="item.class === 'logout'">
+            <a (click)="$event.stopPropagation(); toggleItem(item, $event)"
+               class="nav-link"
+               [class.logout]="item.class === 'logout'"
+               [class.active]="item.isActive"
+               [routerLink]="item.children?.length ? null : item.route"
+               routerLinkActive="active"
+               [routerLinkActiveOptions]="{exact: item.route === '/panel'}">
+              <i [class]="item.icon"></i>
+              <span class="nav-text" *ngIf="!isCollapsed">{{ item.title }}</span>
+              @if (item.badge && !isCollapsed) {
+                <span class="badge">{{ item.badge }}</span>
+              }
+              @if (item.children?.length && !isCollapsed) {
+                <i class="fas fa-chevron-down dropdown-arrow" [class.expanded]="item.isExpanded"></i>
+              }
+            </a>
+            <ul class="submenu">
+              @for (child of item.children; track child.title) {
+                @if (!child.allowedRoles || !userRole || child.allowedRoles.includes(userRole)) {
+                  <li [class.active]="child.isActive">
+                    <a (click)="$event.stopPropagation()"
+                       [routerLink]="child.route"
+                       [class.active]="child.isActive"
+                       routerLinkActive="active"
+                       [routerLinkActiveOptions]="{exact: true}">
+                      <i [class]="child.icon"></i>
+                      <span class="submenu-text" *ngIf="!isCollapsed">{{ child.title }}</span>
+                    </a>
+                  </li>
+                }
+              }
+            </ul>
+          </li>
+        }
       }
     </ul>
   </nav>
