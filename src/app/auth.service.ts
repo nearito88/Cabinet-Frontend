@@ -5,11 +5,8 @@ import { filter, map, switchMap, take } from 'rxjs/operators';
 import { signInWithEmailAndPassword, User } from 'firebase/auth';
 import { Auth, signOut, getIdToken, onAuthStateChanged } from '@angular/fire/auth';
 import { FirebaseError } from 'firebase/app';
+import { UserClaims } from './models/userClaims';
 
-interface UserClaims {
-  role?: string;
-  // Add other custom claims as needed
-}
 
 @Injectable({
   providedIn: 'root',
@@ -41,11 +38,14 @@ export class AuthService implements OnDestroy {
         this.authStateChecked.next(true);
         if (user) {
           try {
-            const token = await getIdToken(user, true); // Force refresh the token
-            console.log('Raw ID Token (Forced Refresh) in AuthService:', token); // Log raw token
+            const token = await getIdToken(user, true); // Force refresh
+            console.log('Raw ID Token (Forced Refresh) in AuthService:', token);
             const decodedToken = this.decodeToken(token);
-            console.log('Decoded Token in AuthService:', decodedToken); // Log decoded token
-            this.userClaimsSubject.next(decodedToken?.claims as UserClaims || null);
+            console.log('Decoded Token in AuthService:', decodedToken);
+
+            const claims = decodedToken?.role ? { role: decodedToken.role } : null; // Directly extract role
+            this.userClaimsSubject.next(claims as UserClaims || null);
+            console.log('AuthService emitting userClaims:', claims); // Log what's being emitted
           } catch (error) {
             console.error('Error getting ID token:', error);
             this.userClaimsSubject.next(null);
@@ -62,7 +62,7 @@ export class AuthService implements OnDestroy {
         this.userClaimsSubject.next(null);
       }
     );
-    this.authStateSubscription.add(() => unsubscribeFn()); // Add the unsubscribe function to the Subscription
+    this.authStateSubscription.add(() => unsubscribeFn());
   }
 
   ngOnDestroy() {

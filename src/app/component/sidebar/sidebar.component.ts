@@ -3,6 +3,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Router, RouterModule, RouterLink, RouterLinkActive, NavigationEnd } from '@angular/router';
 import { AuthService } from '../../auth.service';
 import { Subscription, filter, take } from 'rxjs';
+import { UserClaims } from '../../models/userClaims';
+
 
 // Icons
 import { faSignOutAlt, faUser, faCog, faCalendarAlt, faUserFriends, faHome, faBars, faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -39,6 +41,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   isMobile = false;
   user: any = null;
   userRole: string | null = null; // Declare userRole property
+  userClaims: UserClaims | null = null; // Declare the userClaims property
   private subscriptions = new Subscription();
   isMobileMenuOpen: boolean = false;
   currentYear: number = new Date().getFullYear();
@@ -63,7 +66,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-tachometer-alt',
       route: '/dashboard',
       isActive: false,
-      isExpanded: false
+      isExpanded: false,
+      allowedRoles: ['admin', 'doctor', 'receptionist']
     },
     {
       title: 'Appointments',
@@ -71,18 +75,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
       route: '/panel/appointments',
       isActive: false,
       isExpanded: false,
+      allowedRoles: ['admin', 'doctor', 'receptionist'],
       children: [
         {
           title: 'Appointment List',
           route: '/panel/appointments',
           icon: 'fas fa-list',
-          isActive: false,
-          isExpanded: false
-        },
-        {
-          title: 'Calendar',
-          route: '/panel/appointments/calendar',
-          icon: 'fas fa-calendar-day',
           isActive: false,
           isExpanded: false
         },
@@ -101,6 +99,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       route: '/patients',
       isActive: false,
       isExpanded: false,
+      allowedRoles: ['admin', 'doctor', 'receptionist'],
       children: [
         {
           title: 'List Patients',
@@ -123,6 +122,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-user-md',
       route: '/panel/doctors',
       isActive: false,
+      allowedRoles: ['admin'],
       children: [
         {
           title: 'Doctors List',
@@ -149,6 +149,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-headset',
       route: '/panel/receptionists',
       isActive: false,
+      allowedRoles: ['admin'],
       children: [
         {
           title: 'Receptionists List',
@@ -169,6 +170,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-procedures',
       route: '/panel/services',
       isActive: false,
+      allowedRoles: ['admin', 'doctor'],
       children: [
         {
           title: 'Services List',
@@ -194,6 +196,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       title: 'Inventory',
       icon: 'fas fa-boxes',
       route: '/panel/inventory',
+      allowedRoles: ['admin', 'doctor'],
       isActive: false,
       children: [
         {
@@ -233,6 +236,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-file-invoice',
       route: '/panel/invoices',
       isActive: false,
+      allowedRoles: ['admin', 'doctor', 'receptionist'],
       children: [
         {
           title: 'All Invoices',
@@ -246,12 +250,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
           icon: 'fas fa-plus',
           isActive: false
         },
-        {
-          title: 'Invoice Templates',
-          route: '/panel/invoices/templates',
-          icon: 'fas fa-file-alt',
-          isActive: false
-        }
       ]
     },
     {
@@ -259,6 +257,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-cog',
       route: '/panel/settings',
       isActive: false,
+      allowedRoles: ['admin', 'doctor', 'receptionist'],
       children: [
         {
           title: 'Profile',
@@ -285,7 +284,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
       icon: 'fas fa-sign-out-alt',
       route: '/logout',
       class: 'logout',
-      isActive: false
+      isActive: false,
+      allowedRoles: ['admin', 'doctor', 'receptionist']
     }
   ];
 
@@ -453,6 +453,54 @@ export class SidebarComponent implements OnInit, OnDestroy {
         item.isExpanded = hasActiveChild || (item.isExpanded && item.children.length > 0);
       }
     });
+  }
+
+  private updateNavigationItemsVisibility(): void {
+    if (this.userClaims) { // Check if userClaims is not null
+      const userRole = this.userClaims.role; // Store role in a variable
+  
+      if (userRole) { // Check if userRole exists
+        this.navigationItems = this.navigationItems.filter(item => {
+          if (item.allowedRoles) {
+            return item.allowedRoles.includes(userRole);
+          }
+          return true;
+        });
+  
+        // Filter children as well
+        this.navigationItems.forEach(item => {
+          if (item.children) {
+            item.children = item.children.filter(child => {
+              if (child.allowedRoles) {
+                return child.allowedRoles.includes(userRole);
+              }
+              return true;
+            });
+            // If a parent has no visible children, collapse it
+            if (item.children.length === 0 && item.children.length > 0) {
+              item.isExpanded = false;
+            }
+          }
+        });
+  
+        // Specific role-based removals (as per your requirements)
+        if (userRole === 'doctor') {
+          this.navigationItems = this.navigationItems.filter(item =>
+            item.title !== 'Receptionists' && item.title !== 'Doctors'
+          );
+        } else if (userRole === 'receptionist') {
+          this.navigationItems = this.navigationItems.filter(item =>
+            item.title !== 'Services' && item.title !== 'Inventory' && item.title !== 'Doctors' && item.title !== 'Receptionists'
+          );
+        }
+      } else {
+        // If userClaims exists but role is undefined, show no role-based items
+        this.navigationItems = this.navigationItems.filter(item => !item.allowedRoles);
+      }
+    } else {
+      // If userClaims is null, show no role-based items
+      this.navigationItems = this.navigationItems.filter(item => !item.allowedRoles);
+    }
   }
 
   private updateNavigationItems(): void {

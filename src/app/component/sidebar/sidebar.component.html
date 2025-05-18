@@ -9,15 +9,13 @@
     </button>
   </div>
 
-  <div class="user-profile" *ngIf="!isCollapsed && user">
+  <div class="user-profile" *ngIf="!isCollapsed && userRole">
     <div class="avatar">
       <i class="fas fa-user-md"></i>
     </div>
     <div class="user-info">
-      <h4 class="user-name">{{ user.displayName || 'Utilisateur' }}</h4>
-      <p class="user-email">{{ user.email }}</p>
-      <p class="user-role" *ngIf="userRole">
-        ({{ userRole }})
+      <p class="user-role">
+        {{ userRole }}
       </p>
     </div>
   </div>
