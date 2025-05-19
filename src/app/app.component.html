@@ -1,7 +1,13 @@
-<div class="app-container">
-  <app-sidebar *ngIf="showSidebar"></app-sidebar>
-  <div class="main-content" [class.sidebar-visible]="showSidebar">
-    <router-outlet></router-outlet>
+<div *ngIf="authStateReady$ | async; else loading">
+  <div class="app-container">
+    <app-sidebar *ngIf="showSidebar"></app-sidebar>
+    <div class="main-content" [class.sidebar-visible]="showSidebar">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
   </div>
-  <div class="sidebar-overlay" *ngIf="isSidebarOpen" (click)="toggleSidebar()"></div>
 </div>
+
+<ng-template #loading>
+  <div class="loading-spinner">Loading...</div>
+  </ng-template>

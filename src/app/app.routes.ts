@@ -45,7 +45,7 @@ export const protectedRoutes: Routes = [
           { path: '', redirectTo: 'list', pathMatch: 'full' },
           { path: 'list', component: PatientsListComponent, title: 'Patients List' },
           { path: 'add', component: PatientFormComponent, title: 'Add Patient' },
-          { path: ':id', component: PatientDetailComponent, title: 'Patient Details' }
+          { path: ':id', component: PatientDetailComponent } // This should now work
         ]
       },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }

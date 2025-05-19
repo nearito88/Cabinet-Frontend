@@ -2,7 +2,7 @@ import { User } from "./user";
 
 export interface Patient extends User {
   patientId: string;
-  CIN: string;
+  cin: string;
   disease?: string;
   documents?: string[];
   insurance?: string;

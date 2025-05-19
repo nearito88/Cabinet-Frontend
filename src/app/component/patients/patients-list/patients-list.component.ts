@@ -31,20 +31,39 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class PatientsListComponent implements OnInit {
   patients: Patient[] = [];
+
+  editPatient(patientId: string) {
+    // Navigate to patient details page with patient ID
+    this.router.navigate(['/patients', patientId]);
+  }
+
+  deletePatient(patientId: string) {
+    if (confirm('Are you sure you want to delete this patient?')) {
+      this.patientService.deletePatient(patientId).subscribe({
+        next: () => {
+          this.patients = this.patients.filter(p => p.patientId !== patientId);
+          this.dataSource.data = this.patients;
+        },
+        error: (error) => {
+          console.error('Error deleting patient:', error);
+          this.error = 'Failed to delete patient. Please try again.';
+        }
+      });
+    }
+  }
   displayedColumns: string[] = [
-    'patientId',
     'name',
-    'email',
+    'cin',
+    'age',
     'gender',
     'phone',
-    'age',
-    'dateJoined',
-    'CIN',
+    'email',
+    'status',
     'disease',
+    'medicalHistory',
     'documents',
     'insurance',
-    'status',
-    'medicalHistory',
+    'dateJoined',
     'actions'
   ];
   dataSource = new MatTableDataSource<Patient>([]);

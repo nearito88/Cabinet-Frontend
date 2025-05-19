@@ -11,91 +11,58 @@
     </mat-form-field>
   </div>
 
-  <div class="mat-elevation-z8">
-    <mat-table [dataSource]="dataSource" matSort>
-      
-      <ng-container matColumnDef="patientId">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Patient ID </th>
-        <td mat-cell *matCellDef="let row"> {{row.patientId}} </td>
-      </ng-container>
+  <div class="table-container">
+    <div class="mat-elevation-z8">
+      <table #patientTable id="patientTable" class="display responsive nowrap" style="width:100%">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>CIN</th>
+          <th>Age</th>
+          <th>Gender</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Status</th>
+          <th>Disease</th>
+          <th>Medical History</th>
+          <th>Documents</th>
+          <th>Insurance</th>
+          <th>Date Joined</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let patient of patients">
+          <td>{{patient.name}}</td>
+          <td>{{patient.cin}}</td>
+          <td>{{patient.age}}</td>
+          <td>{{patient.gender}}</td>
+          <td>{{patient.phone}}</td>
+          <td>{{patient.email}}</td>
+          <td class="status-cell">
+            <span class="status-text" [ngClass]="{'status-active': patient.status === 'active',
+                                                'status-inactive': patient.status === 'inactive'}">
+              {{patient.status | titlecase}}
+            </span>
+          </td>
+          <td>{{patient.disease}}</td>
+          <td>{{patient.medicalHistory ? patient.medicalHistory.length : 0}}</td>
+          <td>{{patient.documents ? patient.documents.length : 0}}</td>
+          <td>{{patient.insurance}}</td>
+          <td>{{patient.dateJoined}}</td>
+          <td class="actions-cell">
+            <button mat-icon-button color="primary" (click)="editPatient(patient.patientId)" class="action-button edit-button">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deletePatient(patient.patientId)" class="action-button delete-button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </tr>
+      </tbody>
 
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-        <td mat-cell *matCellDef="let row"> {{row.name}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
-        <td mat-cell *matCellDef="let row"> {{row.email}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="gender">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
-        <td mat-cell *matCellDef="let row"> {{row.gender}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="phone">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
-        <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="age">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
-        <td mat-cell *matCellDef="let row"> {{row.age}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="dateJoined">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Date Joined </th>
-        <td mat-cell *matCellDef="let row"> {{row.dateJoined}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="CIN">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> CIN </th>
-        <td mat-cell *matCellDef="let row"> {{row.CIN}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="disease">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Disease </th>
-        <td mat-cell *matCellDef="let row"> {{row.disease}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="documents">
-        <th mat-header-cell *matHeaderCellDef> Documents </th>
-        <td mat-cell *matCellDef="let row"> {{row.documents ? row.documents.length : 0}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="insurance">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Insurance </th>
-        <td mat-cell *matCellDef="let row"> {{row.insurance}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="status">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
-        <td mat-cell *matCellDef="let row" class="status-cell">
-          <span class="status-dot" [ngClass]="{'status-active': row.status === 'active',
-                                           'status-inactive': row.status === 'inactive',
-                                           'status-pending': row.status === 'pending'}"></span>
-          {{row.status}}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="medicalHistory">
-        <th mat-header-cell *matHeaderCellDef> Medical History </th>
-        <td mat-cell *matCellDef="let row"> {{row.medicalHistory ? row.medicalHistory.length : 0}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef> Actions </th>
-        <td mat-cell *matCellDef="let row">
-          <button mat-raised-button color="primary" (click)="viewPatientDetails(row.patientId)" class="action-button">View</button>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="['patientId', 'name', 'email', 'gender', 'phone', 'age', 'dateJoined', 'CIN', 'disease', 'documents', 'insurance', 'status', 'medicalHistory', 'actions']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['patientId', 'name', 'email', 'gender', 'phone', 'age', 'dateJoined', 'CIN', 'disease', 'documents', 'insurance', 'status', 'medicalHistory', 'actions'];"></tr>
-    </mat-table>
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </table>
+    </div>
   </div>
 
   <div *ngIf="!loading && !error && patients.length === 0" class="empty-state">

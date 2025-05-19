@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { filter, take } from 'rxjs/operators';
 import { AuthService } from './auth.service';
 import { SidebarComponent } from './component/sidebar/sidebar.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -46,6 +47,9 @@ import { SidebarComponent } from './component/sidebar/sidebar.component';
   `]
 })
 export class AppComponent implements OnInit {
+
+  authStateReady$: Observable<boolean> | undefined;
+
   title = 'Medical Office';
   isSidebarOpen = true;
   showApp = false;
@@ -53,7 +57,11 @@ export class AppComponent implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
 
+  constructor(private authService: AuthService){}
+  
   ngOnInit() {
+    
+    this.authStateReady$ = this.authService.authStateReady$;
     // Check initial authentication state and handle sidebar visibility
     this.auth.user$.pipe(take(1)).subscribe((user: any) => {
       if (user) {
