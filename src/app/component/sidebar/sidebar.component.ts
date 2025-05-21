@@ -103,14 +103,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'List Patients',
-          route: '/patients/list',
+          route: '/patients',
           icon: 'fas fa-list',
           isActive: false,
           isExpanded: false
         },
         {
           title: 'Add Patient',
-          route: '/patients/add',
+          route: '/addpatient',
           icon: 'fas fa-plus',
           isActive: false,
           isExpanded: false
@@ -174,22 +174,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'Services List',
-          route: '/panel/services',
+          route: '/services',
           icon: 'fas fa-list',
           isActive: false
         },
         {
           title: 'Add Service',
-          route: '/panel/services/new',
+          route: '/addservice',
           icon: 'fas fa-plus',
           isActive: false
-        },
-        {
-          title: 'Service Categories',
-          route: '/panel/services/categories',
-          icon: 'fas fa-tags',
-          isActive: false
-        }
+        },  
       ]
     },
     {

@@ -4,11 +4,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AdminLayoutComponent } from './component/admin-layout/admin-layout.component';
 import { LoginComponent } from './login/login.component';
 import { AuthGuard } from './auth.guard';
-import { PatientsListComponent } from './component/patients/patients-list/patients-list.component';
-import { PatientFormComponent } from './component/patients/patient-form/patient-form.component';
+import { PatientListComponent } from './component/patients/patients-list/patients-list.component';
 import { PatientDetailComponent } from './component/patients/patient-detail/patient-detail.component';
-import { SidebarComponent } from './component/sidebar/sidebar.component';
-
+import { AddPatientComponent } from './component/patients/patient-form/patient-form.component';
+import { CabinetServiceListComponent } from './component/cabinet-service/service-list/service-list.component';
+import { CabinetServiceDetailComponent } from './component/cabinet-service/service-detail/service-detail.component';
+import { CabinetServiceAddComponent } from './component/cabinet-service/service-form/service-form.component';
 // Public routes (no authentication required)
 export const publicRoutes: Routes = [
   { 
@@ -35,20 +36,18 @@ export const protectedRoutes: Routes = [
     component: AdminLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: DashboardComponent, title: 'Dashboard', data: { title: 'Dashboard' } },
-      {
-        path: 'patients', // <-- The base path for patients
-        component: PatientsListComponent,
-        title: 'Patients',
-        data: { title: 'Patients' },
-        children: [
-          { path: '', redirectTo: 'list', pathMatch: 'full' },
-          { path: 'list', component: PatientsListComponent, title: 'Patients List' },
-          { path: 'add', component: PatientFormComponent, title: 'Add Patient' },
-          { path: ':id', component: PatientDetailComponent } // This should now work
-        ]
-      },
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      { path: 'dashboard', component: DashboardComponent },
+        // Patient
+      { path: 'patients', component: PatientListComponent }, // Patient list
+      { path: 'patients/:id', component: PatientDetailComponent }, // Edit patient
+      { path: 'addpatient', component: AddPatientComponent }, // Add patient (top-level protected)
+        // Service
+      { path: 'services', component: CabinetServiceListComponent },
+      { path: 'services/:id', component: CabinetServiceDetailComponent },
+      { path: 'addservice', component: CabinetServiceAddComponent },
+
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+
     ]
   }
 ];

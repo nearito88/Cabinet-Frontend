@@ -1,19 +1,26 @@
-import { Component, OnInit, ViewChild, inject } from '@angular/core';
-import { Patient } from '../../../models/patient';
-import { PatientService } from '../../../services/patients/patient.service';
-import { Router } from '@angular/router';
+// src/app/patient-list/patient-list.component.ts
+
+import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, TitleCasePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
+import { Patient } from '../../../models/patient';
+import { PatientService } from '../../../services/patients/patient.service';
 
 @Component({
-  selector: 'app-patients-list',
+  selector: 'app-patient-list',
   standalone: true,
   imports: [
     CommonModule,
@@ -24,33 +31,20 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule
   ],
   templateUrl: './patients-list.component.html',
   styleUrls: ['./patients-list.component.css']
 })
-export class PatientsListComponent implements OnInit {
+export class PatientListComponent implements OnInit, AfterViewInit {
   patients: Patient[] = [];
+  errorMessage: string = '';
+  isLoading: boolean = false;
 
-  editPatient(patientId: string) {
-    // Navigate to patient details page with patient ID
-    this.router.navigate(['/patients', patientId]);
-  }
-
-  deletePatient(patientId: string) {
-    if (confirm('Are you sure you want to delete this patient?')) {
-      this.patientService.deletePatient(patientId).subscribe({
-        next: () => {
-          this.patients = this.patients.filter(p => p.patientId !== patientId);
-          this.dataSource.data = this.patients;
-        },
-        error: (error) => {
-          console.error('Error deleting patient:', error);
-          this.error = 'Failed to delete patient. Please try again.';
-        }
-      });
-    }
-  }
   displayedColumns: string[] = [
     'name',
     'cin',
@@ -60,43 +54,70 @@ export class PatientsListComponent implements OnInit {
     'email',
     'status',
     'disease',
-    'medicalHistory',
-    'documents',
+    'documentsCount',
+    'medicalHistoryCount',
     'insurance',
     'dateJoined',
-    'actions'
+    'actions' // Ensure this matches HTML matColumnDef
   ];
-  dataSource = new MatTableDataSource<Patient>([]);
-  loading = true;
-  error = '';
-  patientService = inject(PatientService);
-  router = inject(Router);
+  dataSource = new MatTableDataSource<Patient>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  ngOnInit(): void {
+  private router = inject(Router);
+  private patientService = inject(PatientService);
+  private snackBar = inject(MatSnackBar);
+
+  constructor() {
+    this.dataSource = new MatTableDataSource(this.patients);
+  }
+
+  ngOnInit() {
     this.loadPatients();
   }
 
-  loadPatients(): void {
-    this.loading = true;
+  ngAfterViewInit() {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    // Custom sorting for nested properties (e.g., 'documents.length')
+    this.dataSource.sortingDataAccessor = (item, property) => {
+      switch (property) {
+        case 'documentsCount': return item.documents ? item.documents.length : 0;
+        case 'medicalHistoryCount': return item.medicalHistory ? item.medicalHistory.length : 0;
+        // Handle sorting for 'dateJoined' if it's a string from backend
+        case 'dateJoined': return new Date(item.dateJoined || '').getTime();
+        default: return (item as any)[property];
+      }
+    };
+  }
+
+  loadPatients() {
+    this.isLoading = true;
+    this.errorMessage = '';
     this.patientService.getAllPatients().subscribe({
       next: (patients: Patient[]) => {
         this.patients = patients;
-        this.dataSource = new MatTableDataSource(this.patients);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.loading = false;
+        // Transform dateJoined from string to Date object if necessary
+        // This is important for correct date sorting and display
+        this.dataSource.data = patients.map(p => ({
+            ...p,
+            dateJoined: p.dateJoined ? new Date(p.dateJoined) : null
+        }));
+        this.isLoading = false;
+        console.log('Patients loaded:', this.dataSource.data);
       },
-      error: (err: any) => {
-        this.error = 'Error loading patients.';
-        console.error('Error loading patients:', err);
-        this.loading = false;
+      error: (error: any) => {
+        console.error('Error loading patients:', error);
+        this.errorMessage = 'Failed to load patients. Please try again.';
+        this.isLoading = false;
+        this.snackBar.open(this.errorMessage, 'Close', { duration: 5000 });
       }
     });
   }
 
+  // ... (applyFilter, editPatient, deletePatient, navigateToPatientForm methods)
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement)?.value;
     if (filterValue) {
@@ -107,11 +128,42 @@ export class PatientsListComponent implements OnInit {
     }
   }
 
-  viewPatientDetails(patientId: string): void {
-    this.router.navigate(['/patients', patientId]);
+  editPatient(patientId: string | undefined): void {
+    if (patientId) {
+      this.router.navigate(['/patients', patientId]); // Assuming your patient detail/edit route is like '/patients/:id'
+    } else {
+      this.snackBar.open('Patient ID is missing for editing.', 'Close', { duration: 3000 });
+      console.warn('Attempted to edit a patient with no ID.');
+    }
+  }
+
+  deletePatient(patientId: string | undefined): void {
+    if (!patientId) {
+      this.snackBar.open('Patient ID is missing for deletion.', 'Close', { duration: 3000 });
+      console.warn('Attempted to delete a patient with no ID.');
+      return;
+    }
+
+    if (confirm('Are you sure you want to delete this patient? This action cannot be undone.')) {
+      this.isLoading = true;
+      this.errorMessage = '';
+      this.patientService.deletePatient(patientId).subscribe({
+        next: () => {
+          this.snackBar.open('Patient deleted successfully!', 'Close', { duration: 3000 });
+          this.dataSource.data = this.dataSource.data.filter(p => p.patientId !== patientId);
+          this.isLoading = false;
+        },
+        error: (error: any) => {
+          console.error('Error deleting patient:', error);
+          this.errorMessage = 'Failed to delete patient. Please try again.';
+          this.isLoading = false;
+          this.snackBar.open(this.errorMessage, 'Close', { duration: 5000 });
+        }
+      });
+    }
   }
 
   navigateToPatientForm(): void {
-    this.router.navigate(['/patients/add']);
+    this.router.navigate(['/addpatient']); // Assuming your add patient route is '/addpatient'
   }
 }

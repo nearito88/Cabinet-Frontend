@@ -1,0 +1,286 @@
+/* Variables (ensure these are globally defined in styles.scss or similar) */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b8;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+    --background-color: #fff;
+    --section-bg: #f8f9fa;
+    --border-color: #e9ecef;
+}
+
+
+.service-list-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 25px; /* Added some padding to the container itself */
+    background: var(--background-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif; /* Consistent font */
+}
+
+.service-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+}
+
+.service-list-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.action-button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 8px; /* Slightly more rounded for buttons */
+    transition: all 0.3s ease;
+}
+
+.action-button mat-icon {
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+/* Filter Section */
+.filter-section {
+    margin-bottom: 25px;
+}
+
+.filter-section mat-form-field {
+    width: 100%;
+}
+
+/* Table Specific Styles */
+.table-container {
+    overflow-x: auto; /* For responsive tables on smaller screens */
+    margin-bottom: 25px;
+}
+
+.mat-elevation-z8 {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); /* Stronger shadow for the table card */
+    border-radius: 8px; /* Matches container radius */
+    overflow: hidden; /* Ensures borders/shadows don't bleed */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure no double borders */
+    background-color: var(--background-color);
+    color: var(--dark-color);
+}
+
+table thead tr {
+    background-color: var(--primary-color);
+    /* The problem might be here or an override. Let's make it more specific below */
+    /* color: white; */
+}
+
+/* **FIX FOR INVISIBLE HEADERS:** Apply color directly and more specifically */
+/* If using traditional HTML table */
+.mat-header-cell, .mat-mdc-header-cell {
+    color: white !important;
+    background-color: var(--primary-color) !important;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.mat-header-cell {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white !important;
+    background-color: var(--primary-color) !important;
+}
+
+.mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+table th {
+    padding: 15px 20px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgb(12, 11, 11) !important;
+    background-color: var(--primary-color) !important;
+}
+
+
+table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+}
+
+table tbody tr:last-child {
+    border-bottom: none; /* No border for the last row */
+}
+
+table tbody tr:hover {
+    background-color: var(--section-bg); /* Light hover effect */
+}
+
+table td {
+    padding: 15px 20px;
+    font-size: 14px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Material table cells */
+.mat-cell, .mat-mdc-cell {
+    padding: 15px 20px;
+    text-align: center;
+}
+
+/* Actions Cell */
+.actions-cell {
+    white-space: nowrap; /* Prevent buttons from wrapping */
+    text-align: center; /* Center the action buttons */
+}
+
+.actions-cell button {
+    min-width: unset; /* Override default button min-width */
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%; /* Make icon buttons round */
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.actions-cell button:hover {
+    background-color: rgba(0, 0, 0, 0.04); /* Light hover effect for icon buttons */
+    transform: translateY(-1px);
+}
+
+.actions-cell button mat-icon {
+    font-size: 20px;
+    vertical-align: middle; /* Center icon */
+}
+
+/* Specific button colors for consistency */
+.actions-cell .edit-button {
+    color: var(--primary-color);
+}
+
+.actions-cell .delete-button {
+    color: var(--danger-color);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--secondary-color);
+    background-color: var(--section-bg);
+    border-radius: 8px;
+    margin-top: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.empty-state-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--info-color); /* A pleasant color for empty state icon */
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    margin: 5px 0;
+    font-size: 16px;
+}
+
+
+/* Loading and Error messages - using existing styles */
+.loading-container, .error-message {
+    margin: 20px auto; /* Center them within the container */
+    max-width: 600px; /* Limit their width if needed */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .service-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .service-list-title {
+        margin-bottom: 15px;
+    }
+
+    table, thead, tbody, th, td, tr {
+        display: block; /* Make table elements behave like blocks */
+    }
+
+    thead tr {
+        position: absolute;
+        top: -9999px;
+        left: -9999px; /* Hide table headers visually */
+    }
+
+    table tr {
+        border: 1px solid var(--border-color);
+        margin-bottom: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    table td {
+        border: none;
+        position: relative;
+        padding-left: 50%; /* Make space for pseudo-element labels */
+        text-align: right; /* Align content to the right */
+    }
+
+    table td:before {
+        content: attr(data-label); /* Use data-label for mobile headers */
+        position: absolute;
+        left: 6px;
+        width: 45%;
+        padding-right: 10px;
+        white-space: nowrap;
+        text-align: left;
+        font-weight: 600;
+        color: var(--dark-color);
+    }
+
+    /* Specific data-labels for each column */
+    table td:nth-of-type(1):before { content: "Service Name:"; }
+    table td:nth-of-type(2):before { content: "Description:"; }
+    table td:nth-of-type(3):before { content: "Price:"; }
+    table td:nth-of-type(4):before { content: "Actions:"; }
+
+    .actions-cell {
+        text-align: left; /* Align actions to the left for better mobile layout */
+        padding-left: 6px; /* Adjust padding for actions */
+        display: flex;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+}

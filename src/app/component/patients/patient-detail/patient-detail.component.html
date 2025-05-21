@@ -1,85 +1,129 @@
-<div *ngIf="patient">
-    <h2>Patient Details</h2>
-  
-    <div *ngIf="!isEditMode">
-      <p><strong>Name:</strong> {{ patient.name }}</p>
-      <p><strong>Email:</strong> {{ patient.email }}</p>
-      <p><strong>Gender:</strong> {{ patient.gender }}</p>
-      <p><strong>Phone:</strong> {{ patient.phone }}</p>
-      <p><strong>Age:</strong> {{ patient.age }}</p>
-      <p><strong>Date Joined:</strong> {{ patient.dateJoined }}</p>
-      <p><strong>CIN:</strong> {{ patient.cin }}</p>
-      <p><strong>Disease:</strong> {{ patient.disease }}</p>
-      <p><strong>Insurance:</strong> {{ patient.insurance }}</p>
-      <p><strong>Status:</strong> {{ patient.status }}</p>
-      <button (click)="enableEditMode()">Edit</button>
-      <button routerLink="/patients">Back to List</button>
-    </div>
-  
-    <div *ngIf="isEditMode" [formGroup]="patientForm">
-      <h3>Edit Patient Details</h3>
-  
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput formControlName="name" required>
-        <mat-error *ngIf="patientForm.controls['name'].hasError('required')">Name is required</mat-error>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Email</mat-label>
-        <input matInput formControlName="email" required email>
-        <mat-error *ngIf="patientForm.controls['email'].hasError('required')">Email is required</mat-error>
-        <mat-error *ngIf="patientForm.controls['email'].hasError('email')">Invalid email format</mat-error>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Gender</mat-label>
-        <input matInput formControlName="gender">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Phone</mat-label>
-        <input matInput formControlName="phone">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Age</mat-label>
-        <input matInput type="number" formControlName="age" min="0">
-        <mat-error *ngIf="patientForm.controls['age'].hasError('min')">Age must be at least 0</mat-error>
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Date Joined</mat-label>
-        <input matInput formControlName="dateJoined">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>CIN</mat-label>
-        <input matInput formControlName="CIN">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Disease</mat-label>
-        <input matInput formControlName="disease">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Insurance</mat-label>
-        <input matInput formControlName="insurance">
-      </mat-form-field>
-  
-      <mat-form-field>
-        <mat-label>Status</mat-label>
-        <input matInput formControlName="status">
-      </mat-form-field>
-  
-      <div>
-        <button mat-raised-button color="primary" (click)="savePatientDetails()" [disabled]="patientForm.invalid">Save</button>
-        <button (click)="cancelEditMode()">Cancel</button>
+<mat-card *ngIf="!isLoading && !errorMessage && patient" class="patient-card">
+  <mat-card-header>
+    <mat-card-title>EDIT PATIENT</mat-card-title>
+    <mat-card-subtitle>Patient ID: {{ patient.patientId }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="patient-info-grid">
+      <!-- Personal Information Section -->
+      <div class="info-section">
+        <h3><mat-icon>person</mat-icon> Personal Information</h3>
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Name</mat-label>
+            <input matInput [(ngModel)]="patientName">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>CIN</mat-label>
+            <input matInput [(ngModel)]="patientCin">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Age</mat-label>
+            <input matInput type="number" [(ngModel)]="patientAge">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Gender</mat-label>
+            <mat-select [(ngModel)]="patientGender">
+              <mat-option value="male">Male</mat-option>
+              <mat-option value="female">Female</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Contact Information Section -->
+      <div class="info-section">
+        <h3><mat-icon>phone</mat-icon> Contact Information</h3>
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Phone</mat-label>
+            <input matInput [(ngModel)]="patientPhone">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" [(ngModel)]="patientEmail">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Medical Information Section -->
+      <div class="info-section">
+        <h3><mat-icon>medical_services</mat-icon> Medical Information</h3>
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+            <mat-select [(ngModel)]="patientStatus">
+              <mat-option value="active">Active</mat-option>
+              <mat-option value="inactive">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Disease</mat-label>
+            <input matInput [(ngModel)]="patientDisease">
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Insurance</mat-label>
+            <input matInput [(ngModel)]="patientInsurance">
+          </mat-form-field>
+        </div>
       </div>
     </div>
-  </div>
-  
-  <div *ngIf="!patient">
-    <p>Loading patient details...</p>
-  </div>
+
+    <!-- Documents Section -->
+    <div class="documents-section">
+      <h3><mat-icon>description</mat-icon> Documents</h3>
+      <div class="form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Add New Document</mat-label>
+          <input matInput [(ngModel)]="newDocument" placeholder="Enter document name">
+        </mat-form-field>
+      </div>
+      <div class="documents-list">
+        <ul *ngIf="patient.documents && patient.documents.length > 0">
+          <li *ngFor="let doc of patient.documents" class="document-item">
+            <mat-icon>insert_drive_file</mat-icon> {{ doc }}
+          </li>
+        </ul>
+        <p *ngIf="!patient.documents || patient.documents.length === 0" class="no-items">No documents available.</p>
+      </div>
+    </div>
+
+    <!-- Medical History Section -->
+    <div class="medical-history-section">
+      <h3><mat-icon>history</mat-icon> Medical History</h3>
+      <div class="form-group">
+        <mat-form-field appearance="outline">
+          <mat-label>Add New Medical History</mat-label>
+          <input matInput [(ngModel)]="newMedicalHistory" placeholder="Enter medical history">
+        </mat-form-field>
+      </div>
+      <div class="history-list">
+        <ul *ngIf="patient.medicalHistory && patient.medicalHistory.length > 0">
+          <li *ngFor="let history of patient.medicalHistory" class="history-item">
+            <mat-icon>event_note</mat-icon> {{ history }}
+          </li>
+        </ul>
+        <p *ngIf="!patient.medicalHistory || patient.medicalHistory.length === 0" class="no-items">No medical history available.</p>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="savePatient()">
+      <mat-icon>save</mat-icon> Save
+    </button>
+    <button mat-button (click)="cancel()">
+      <mat-icon>close</mat-icon> Cancel
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<div *ngIf="isLoading" class="loading-container">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading patient details...</p>
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+</div>

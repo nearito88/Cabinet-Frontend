@@ -1,0 +1,50 @@
+<mat-card class="service-add-card">
+    <mat-card-header>
+      <mat-card-title>ADD NEW SERVICE</mat-card-title>
+      <mat-card-subtitle>Enter service details to create a new offering</mat-card-subtitle>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <form class="service-form-grid">
+        <div class="info-section">
+          <h3><mat-icon>build</mat-icon> Service Details</h3>
+          <div class="form-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Service Name</mat-label>
+              <input matInput [(ngModel)]="service.serviceName" name="serviceName" required>
+              </mat-form-field>
+  
+            <mat-form-field appearance="outline">
+              <mat-label>Description</mat-label>
+              <textarea matInput [(ngModel)]="service.description" name="description" rows="3"></textarea>
+            </mat-form-field>
+  
+            <mat-form-field appearance="outline">
+              <mat-label>Price (MAD)</mat-label>
+              <input matInput type="number" [(ngModel)]="service.price" name="price" required min="0">
+              </mat-form-field>
+          </div>
+        </div>
+        </form>
+    </mat-card-content>
+  
+    <mat-card-actions>
+      <div class="button-container">
+        <button mat-raised-button color="primary" (click)="saveService()">
+          <mat-icon>add_circle_outline</mat-icon> Add Service
+        </button>
+        <button mat-button (click)="cancel()">
+          <mat-icon>close</mat-icon> Cancel
+        </button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Adding new service...</p>
+  </div>
+  
+  <div *ngIf="errorMessage" class="error-message">
+    <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+  </div>

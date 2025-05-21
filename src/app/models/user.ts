@@ -3,6 +3,6 @@ export interface User {
     email?: string;
     gender?: string;
     phone?: string;
-    age?: string;
-    dateJoined?: string;
+    age?: number | null | undefined;
+    dateJoined?: string | Date | null;
 }

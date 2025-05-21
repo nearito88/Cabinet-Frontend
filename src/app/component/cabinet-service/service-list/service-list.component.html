@@ -1,0 +1,66 @@
+<div class="service-list-container">
+    <div class="service-list-header">
+      <h2 class="service-list-title">Cabinet Services</h2>
+      <button mat-raised-button color="primary" (click)="navigateToServiceForm()" class="action-button">
+        <mat-icon>add</mat-icon> Add New Service
+      </button>
+    </div>
+  
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading services...</p>
+    </div>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+  
+    <div class="table-container" *ngIf="!isLoading && !errorMessage">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+  
+          <ng-container matColumnDef="serviceName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Service Name </th>
+            <td mat-cell *matCellDef="let service"> {{ service.serviceName }} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="description">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
+            <td mat-cell *matCellDef="let service"> {{ service.description }} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+            <td mat-cell *matCellDef="let service"> {{ service.price | currency:'MAD':'symbol':'1.2-2' }} </td>
+          </ng-container>
+  
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let service" class="actions-cell">
+              <button mat-icon-button color="primary" (click)="editService(service.serviceId)" class="action-button edit-button" matTooltip="Edit Service">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteService(service.serviceId)" class="action-button delete-button" matTooltip="Delete Service">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No services available.</td>
+          </tr>
+        </table>
+  
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 50]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  
+    <div *ngIf="!isLoading && !errorMessage && services.length === 0" class="empty-state">
+      <mat-icon class="empty-state-icon">medical_services_off</mat-icon>
+      <p>No services found.</p>
+      <p>Click "Add New Service" to create one.</p>
+    </div>
+  </div>

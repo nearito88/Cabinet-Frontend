@@ -8,4 +8,5 @@ export interface Patient extends User {
   insurance?: string;
   status?: string;
   medicalHistory?: string[];
+  
 }
