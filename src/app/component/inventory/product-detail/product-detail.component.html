@@ -1,0 +1,90 @@
+<mat-card *ngIf="!isLoading && product" class="product-detail-card">
+  <mat-card-header>
+    <mat-card-title>PRODUCT DETAILS</mat-card-title>
+    <mat-card-subtitle *ngIf="product">Product ID: {{ product.productId }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <form class="product-form-grid" [formGroup]="productForm">
+      <div class="info-section">
+        <h3><mat-icon>inventory_2</mat-icon> Product Information</h3>
+        <div class="form-group">
+          <mat-form-field appearance="outline">
+            <mat-label>Product Name</mat-label>
+            <input matInput formControlName="productName" required>
+            <mat-error *ngIf="productForm.controls['productName'].hasError('required') && productForm.controls['productName'].touched">
+              Product name is required
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Price (MAD)</mat-label>
+            <input matInput type="number" formControlName="price" required min="0">
+            <mat-error *ngIf="productForm.controls['price'].hasError('required') && productForm.controls['price'].touched">
+              Price is required
+            </mat-error>
+            <mat-error *ngIf="productForm.controls['price'].hasError('min') && productForm.controls['price'].touched">
+              Price must be positive
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Quantity</mat-label>
+            <input matInput type="number" formControlName="quantity" required min="0">
+            <mat-error *ngIf="productForm.controls['quantity'].hasError('required') && productForm.controls['quantity'].touched">
+              Quantity is required
+            </mat-error>
+            <mat-error *ngIf="productForm.controls['quantity'].hasError('min') && productForm.controls['quantity'].touched">
+              Quantity must be non-negative
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Minimum Stock</mat-label>
+            <input matInput type="number" formControlName="minimum" required min="0">
+            <mat-error *ngIf="productForm.controls['minimum'].hasError('required') && productForm.controls['minimum'].touched">
+              Minimum stock is required
+            </mat-error>
+            <mat-error *ngIf="productForm.controls['minimum'].hasError('min') && productForm.controls['minimum'].touched">
+              Minimum must be non-negative
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Last Updated</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="dateUpdated" readonly>
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="productForm.controls['dateUpdated'].hasError('required') && productForm.controls['dateUpdated'].touched">
+              Date is required
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="button-container">
+      <button mat-raised-button color="primary" (click)="saveProduct()" [disabled]="productForm.invalid">
+        <mat-icon>save</mat-icon> Save Changes
+      </button>
+      <button mat-raised-button color="warn" (click)="deleteProduct()">
+        <mat-icon>delete</mat-icon> Delete Product
+      </button>
+      <button mat-button (click)="cancel()">
+        <mat-icon>close</mat-icon> Cancel
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>
+
+<div *ngIf="isLoading && !product" class="loading-container">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Loading product details...</p>
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+</div>

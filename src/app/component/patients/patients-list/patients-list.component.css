@@ -1,36 +1,151 @@
 /* src/app/patient-list/patient-list.component.css */
 
-/* ... (previous general styles for main-container, patient-card, filter-container, loading/error) ... */
+/* General container and card styles */
+.main-container {
+  padding: 20px;
+  background-color: var(--background-color, #f0f2f5);
+  min-height: calc(100vh - 64px); /* Adjust based on header height */
+  box-sizing: border-box;
+}
+
+.patient-card {
+  background: var(--background-color, #fff);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  padding: 25px;
+  margin-bottom: 25px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.patient-card mat-card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+  padding-bottom: 15px;
+}
+
+.patient-card mat-card-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 15px;
+  border-top: 1px solid var(--border-color, #e9ecef);
+}
+
+.add-button {
+  background-color: var(--success-color, #28a745);
+  color: white;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.add-button:hover {
+  background-color: darken(var(--success-color, #28a745), 10%);
+  transform: translateY(-1px);
+}
+
+.add-button mat-icon {
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+/* Filter Section */
+.filter-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border-color, #e9ecef);
+}
+
+.filter-container mat-form-field {
+  flex-grow: 1;
+  margin-right: 20px;
+  width: auto; /* Ensure it takes available width */
+}
 
 /* Main table container */
 .table-container {
   overflow-x: auto; /* Important for horizontal scrolling */
   margin-top: 20px;
+  border-radius: 8px; /* Matches card radius */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Subtle shadow for table */
+  background-color: var(--background-color, #fff);
 }
 
+/* Base table style for collapse */
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th.mat-header-cell {
-  background-color: var(--primary-color, #3f51b5); /* Use a default if var not defined */
-  color: white;
-  font-weight: 600;
-  font-size: 14px;
-  padding: 12px 16px;
-  text-align: left;
+/* Material table header rows */
+tr.mat-header-row {
+  background-color: var(--primary-color, #3f51b5); /* Consistent with service list */
+  color: white; /* Make header text white */
+  height: 48px; /* Standard Material Design row height */
+  display: flex; /* Make it a flex container */
+  align-items: center; /* Vertically center header content */
+  width: 100%; /* Ensure it spans full width */
 }
 
+/* Material table data rows */
+tr.mat-row {
+  height: 48px; /* Standard Material Design row height */
+  transition: background-color 0.2s ease;
+  display: flex; /* Make it a flex container */
+  align-items: center; /* Vertically center row content */
+  width: 100%; /* Ensure it spans full width */
+}
+
+tr.mat-row:hover {
+  background-color: var(--hover-color, #f5f5f5);
+}
+
+/* Material table header cells (th.mat-header-cell) */
+th.mat-header-cell {
+  /* These styles override parent and ensure specific alignment */
+  font-weight: 600;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 12px 16px; /* Material default padding */
+  text-align: left; /* Default text align */
+  white-space: nowrap; /* Prevent wrapping in headers */
+  color: white !important; /* Force white color if other rules override */
+  background-color: var(--primary-color, #3f51b5) !important; /* Force primary color background */
+
+  /* Ensure flex alignment within header cells, matching service list */
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+  align-items: center; /* Center content vertically */
+  height: 100%; /* Take full height of the flex row */
+}
+
+/* Material table data cells (td.mat-cell) */
 td.mat-cell {
-  padding: 12px 16px;
+  padding: 12px 16px; /* Standard Material default padding */
   border-bottom: 1px solid var(--border-color, #e0e0e0);
   color: var(--text-color, #333);
   white-space: nowrap; /* Prevent wrapping for most cells */
   overflow: hidden;
   text-overflow: ellipsis; /* Add ellipsis for overflowed text */
-  max-width: 150px; /* Adjust as needed, but be careful not to make cells too small */
+  max-width: 150px; /* Adjust as needed */
+  vertical-align: middle; /* Ensure vertical alignment */
+  text-align: left; /* Default text align */
+  /* When a td.mat-cell is inside a flex row, it needs to be flex-aware */
+  display: flex; /* Make cell a flex container */
+  align-items: center; /* Vertically center cell content */
+  height: 100%; /* Take full height of the flex row */
 }
+
 
 /* Specific styling for the status cell */
 .status-cell .status-text {
@@ -52,53 +167,56 @@ td.mat-cell {
   color: #d32f2f; /* Dark red */
 }
 
-tr.mat-header-row {
-  height: auto; /* Allow header row to adjust height */
-}
-
-tr.mat-row {
-  height: auto; /* Allow data rows to adjust height */
-  transition: background-color 0.2s ease;
-}
-
-tr.mat-row:hover {
-  background-color: var(--hover-color, #f5f5f5);
-}
-
+/* Actions Cell - Harmonized with Service List look */
 .actions-cell {
-  white-space: nowrap; /* Prevent buttons from wrapping */
-  width: 120px; /* Fixed width for actions column */
-  min-width: 120px; /* Ensure it retains minimum width */
-  text-align: center;
-  display: flex; /* Use flexbox for horizontal alignment */
-  justify-content: center; /* Center horizontally */
-  align-items: center; /* Center vertically */
-  gap: 5px; /* Space between buttons */
+  white-space: nowrap;
+  width: 120px;
+  min-width: 120px;
+  text-align: center; /* This centers the flex container itself */
+  display: flex;
+  justify-content: center; /* Center buttons horizontally */
+  align-items: center; /* Ensure buttons are vertically centered within the cell */
+  gap: 5px;
+  padding: 0 5px; /* Minimal padding to contain icons */
+  /* For patient list, ensure icons are always gray as per image_79860a.png */
 }
 
 .actions-cell .mat-icon-button {
-  margin: 0;
+  min-width: unset;
+  width: 36px;
+  height: 36px;
   padding: 0;
-  line-height: 1;
-  min-width: 30px;
-  height: 30px;
-  width: 30px;
+  border-radius: 50%;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  display: flex; /* Make button itself a flex container */
+  justify-content: center; /* Center icon horizontally in button */
+  align-items: center; /* Center icon vertically in button */
+}
+
+.actions-cell .mat-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+  transform: translateY(-1px);
 }
 
 .actions-cell .mat-icon-button mat-icon {
   font-size: 20px;
   width: 20px;
   height: 20px;
-  color: inherit;
+  color: #555 !important; /* Force icons to be dark gray */
 }
 
-.edit-button {
-  color: var(--primary-color, #3f51b5);
+/* Ensure conflicting explicit colors for edit/delete are removed or commented out */
+/* .actions-cell .edit-button {
+  color: var(--primary-color);
 }
 
-.delete-button {
-  color: var(--warn-color, #f44336);
-}
+.actions-cell .delete-button {
+  color: var(--danger-color);
+} */
+
 
 mat-paginator {
   background-color: var(--background-color, #f5f5f5);
@@ -121,30 +239,37 @@ mat-paginator {
   margin-bottom: 20px;
 }
 
+/* Responsive adjustments */
 @media (max-width: 900px) {
   .main-container {
-    padding: 10px;
+      padding: 10px;
   }
   .filter-container {
-    flex-direction: column;
-    align-items: flex-start;
+      flex-direction: column;
+      align-items: flex-start;
   }
   .filter-container mat-form-field {
-    width: 100%;
-    margin-bottom: 15px;
-    margin-right: 0;
+      width: 100%;
+      margin-bottom: 15px;
+      margin-right: 0;
   }
   .patient-card mat-card-title {
-    font-size: 1.8em;
+      font-size: 1.8em;
   }
-  /* On smaller screens, allow cells to wrap text to prevent excessive horizontal scroll */
   td.mat-cell {
-    white-space: normal;
-    word-break: break-word;
-    max-width: none; /* Remove max-width on smaller screens if it causes issues */
+      white-space: normal;
+      word-break: break-word;
+      max-width: none;
   }
   .actions-cell {
-    width: auto; /* Allow actions cell to adjust width */
-    min-width: auto;
+      width: auto;
+      min-width: auto;
+  }
+
+  /* On smaller screens, if rows stack, ensure vertical centering */
+  tr.mat-header-row,
+  tr.mat-row {
+      height: auto; /* Allow height to adjust for wrapped content */
+      align-items: flex-start; /* Align content to the top when wrapping */
   }
 }

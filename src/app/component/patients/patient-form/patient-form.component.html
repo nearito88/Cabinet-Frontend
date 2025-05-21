@@ -5,70 +5,74 @@
   </mat-card-header>
 
   <mat-card-content>
-    <div class="info-section">
-      <div class="form-row">
+    <form class="patient-form-grid">
+      <div class="info-section">
+        <h3><mat-icon>person</mat-icon> Personal Information</h3>
         <div class="form-group">
-          <h3><mat-icon>person</mat-icon> Personal Information</h3>
           <mat-form-field appearance="outline">
             <mat-label>Name</mat-label>
-            <input matInput [(ngModel)]="patient.name">
+            <input matInput [(ngModel)]="patient.name" name="name">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>CIN</mat-label>
-            <input matInput [(ngModel)]="patient.cin">
+            <input matInput [(ngModel)]="patient.cin" name="cin">
           </mat-form-field>
           <mat-form-field appearance="outline" class="age-field">
             <mat-label>Age</mat-label>
-            <input matInput type="number" [(ngModel)]="patient.age" min="0" max="150">
+            <input matInput type="number" [(ngModel)]="patient.age" name="age" min="0" max="150">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Gender</mat-label>
-            <mat-select [(ngModel)]="patient.gender">
+            <mat-select [(ngModel)]="patient.gender" name="gender">
               <mat-option value="male">Male</mat-option>
               <mat-option value="female">Female</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
+      </div>
 
+      <div class="info-section">
+        <h3><mat-icon>phone</mat-icon> Contact Information</h3>
         <div class="form-group">
-          <h3><mat-icon>phone</mat-icon> Contact Information</h3>
           <mat-form-field appearance="outline">
             <mat-label>Phone</mat-label>
-            <input matInput [(ngModel)]="patient.phone">
+            <input matInput [(ngModel)]="patient.phone" name="phone">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
-            <input matInput type="email" [(ngModel)]="patient.email">
+            <input matInput type="email" [(ngModel)]="patient.email" name="email">
           </mat-form-field>
         </div>
+      </div>
 
+      <div class="info-section">
+        <h3><mat-icon>medical_services</mat-icon> Medical Information</h3>
         <div class="form-group">
-          <h3><mat-icon>medical_services</mat-icon> Medical Information</h3>
           <mat-form-field appearance="outline">
             <mat-label>Status</mat-label>
-            <mat-select [(ngModel)]="patient.status">
+            <mat-select [(ngModel)]="patient.status" name="status">
               <mat-option value="active">Active</mat-option>
               <mat-option value="inactive">Inactive</mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Disease</mat-label>
-            <input matInput [(ngModel)]="patient.disease">
+            <input matInput [(ngModel)]="patient.disease" name="disease">
           </mat-form-field>
           <mat-form-field appearance="outline">
             <mat-label>Insurance</mat-label>
-            <input matInput [(ngModel)]="patient.insurance">
+            <input matInput [(ngModel)]="patient.insurance" name="insurance">
           </mat-form-field>
         </div>
       </div>
-    </div>
+    </form>
 
     <div class="documents-section">
       <h3><mat-icon>description</mat-icon> Documents</h3>
       <div class="form-group">
         <mat-form-field appearance="outline">
           <mat-label>Add New Document</mat-label>
-          <input matInput [(ngModel)]="newDocument" placeholder="Enter document name">
+          <input matInput [(ngModel)]="newDocument" placeholder="Enter document name" name="newDocument">
           <button mat-icon-button matSuffix (click)="addDocument()">
             <mat-icon>add</mat-icon>
           </button>
@@ -89,7 +93,7 @@
       <div class="form-group">
         <mat-form-field appearance="outline">
           <mat-label>Add New Medical History</mat-label>
-          <input matInput [(ngModel)]="newMedicalHistory" placeholder="Enter medical history">
+          <input matInput [(ngModel)]="newMedicalHistory" placeholder="Enter medical history" name="newMedicalHistory">
           <button mat-icon-button matSuffix (click)="addMedicalHistory()">
             <mat-icon>add</mat-icon>
           </button>

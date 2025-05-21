@@ -1,0 +1,275 @@
+/* src/app/product-list/product-list.component.css */
+
+/* Variables (ensure these are globally defined in styles.scss or similar) */
+/* If you define these globally, you can remove this :root block from here. */
+:root {
+    --primary-color: #007bff; /* <--- ADDED SEMICOLON HERE */
+    --secondary-color: #6c757d; /* <--- ADDED SEMICOLON HERE */
+    --success-color: #28a745; /* <--- ADDED SEMICOLON HERE */
+    --warning-color: #ffc107; /* <--- ADDED SEMICOLON HERE */
+    --danger-color: #dc3545; /* <--- ADDED SEMICOLON HERE */
+    --info-color: #17a2b8; /* <--- ADDED SEMICOLON HERE */
+    --light-color: #f8f9fa; /* <--- ADDED SEMICOLON HERE */
+    --dark-color: #343a40; /* <--- ADDED SEMICOLON HERE */
+    --background-color: #fff; /* <--- ADDED SEMICOLON HERE */
+    --section-bg: #f8f9fa; /* <--- ADDED SEMICOLON HERE */
+    --border-color: #e9ecef; /* <--- ADDED SEMICOLON HERE */
+    }
+    
+    /* --- Container and Header Section --- */
+    .product-list-container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 25px;
+    background: var(--background-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    }
+    
+    .product-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    }
+    
+    .product-list-title {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    }
+    
+    .action-button { /* For "Add New Product" and other action buttons */
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    }
+    
+    .action-button mat-icon {
+    margin-right: 8px;
+    font-size: 20px;
+    }
+    
+    /* Filter Section (if applicable, add input to header in HTML) */
+    /* If you add a filter input to the product-list-header, you might need this: */
+    /*
+    .filter-input {
+        width: 250px;
+    }
+    */
+    
+    /* --- Table Specific Styles --- */
+    .table-container {
+    overflow-x: auto;
+    margin-bottom: 25px;
+    }
+    
+    .mat-elevation-z8 {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    }
+    
+    table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--background-color);
+    color: var(--dark-color);
+    }
+    
+    /* Header Cell Styles (Column Titles) */
+    .mat-header-cell, .mat-mdc-header-cell {
+    color: rgb(9, 9, 9) !important;
+    background-color: var(--primary-color) !important;
+    font-weight: 600;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 15px 20px;
+    text-align: center;
+    }
+    
+    /* This is a specific rule to ensure the sort header content is centered */
+    .mat-sort-header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    }
+    
+    /* Data Cell Styles (Column Content) */
+    table tbody tr {
+    border-bottom: 1px solid var(--border-color);
+    transition: background-color 0.2s ease;
+    }
+    
+    table tbody tr:last-child {
+    border-bottom: none;
+    }
+    
+    table tbody tr:hover {
+    background-color: var(--section-bg);
+    }
+    
+    .mat-cell, .mat-mdc-cell {
+    padding: 15px 20px;
+    text-align: center; /* Default: Centers content for most Material data cells */
+        vertical-align: middle; /* Align content vertically */
+    }
+    
+    /* Product-Specific Data Cell Alignment */
+    .mat-column-name .mat-cell {
+    text-align: left; /* Left-aligns the data within the 'Name' column */
+    }
+    
+    /* Product-Specific Low Stock Styling */
+    .low-stock {
+    color: var(--danger-color);
+    font-weight: bold;
+    }
+    
+    /* Actions Cell (for edit/delete buttons) */
+    .actions-cell {
+    white-space: nowrap;
+    text-align: center;
+    }
+    
+    .actions-cell button {
+    min-width: unset;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    }
+    
+    .actions-cell button:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    transform: translateY(-1px);
+    }
+    
+    .actions-cell button mat-icon {
+    font-size: 20px;
+    vertical-align: middle;
+    }
+    
+    /* Specific button colors for consistency */
+    .actions-cell .edit-button {
+    color: var(--primary-color);
+    }
+    
+    .actions-cell .delete-button {
+    color: var(--danger-color);
+    }
+    
+    /* --- Empty State --- */
+    .empty-state {
+    text-align: center;
+    padding: 50px 20px;
+    color: var(--secondary-color);
+    background-color: var(--section-bg);
+    border-radius: 8px;
+    margin-top: 25px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    
+    .empty-state-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: var(--info-color);
+    margin-bottom: 15px;
+    }
+    
+    .empty-state p {
+    margin: 5px 0;
+    font-size: 16px;
+    }
+    
+    /* --- Loading and Error messages --- */
+    .loading-container, .error-message {
+    margin: 20px auto;
+    max-width: 600px;
+    }
+    
+    /* --- Paginator --- */
+    .mat-paginator {
+        background-color: var(--background-color);
+        border-top: 1px solid var(--border-color);
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+        padding: 10px;
+    }
+    
+    /* --- Responsive adjustments --- */
+    @media (max-width: 768px) {
+    .product-list-header {
+    flex-direction: column;
+    align-items: flex-start;
+    }
+    
+    .product-list-title {
+    margin-bottom: 15px;
+    }
+    
+    .action-button {
+    width: 100%;
+    }
+    
+    table, thead, tbody, th, td, tr {
+    display: block;
+    }
+    
+    thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+    }
+    
+    table tr {
+    border: 1px solid var(--border-color);
+    margin-bottom: 10px;
+    border-radius: 8px;
+    overflow: hidden;
+    }
+    
+    table td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    text-align: right;
+    }
+    
+    table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 6px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    text-align: left;
+    font-weight: 600;
+    color: var(--dark-color);
+    }
+    
+    /* Specific data-labels for product columns */
+    table td:nth-of-type(1):before { content: "Name:"; }
+    table td:nth-of-type(2):before { content: "Price:"; }
+    table td:nth-of-type(3):before { content: "Quantity:"; }
+    table td:nth-of-type(4):before { content: "Minimum:"; }
+    table td:nth-of-type(5):before { content: "Date Updated:"; }
+    table td:nth-of-type(6):before { content: "Actions:"; }
+    
+    .actions-cell {
+    text-align: left;
+    padding-left: 6px;
+    display: flex;
+    justify-content: flex-start;
+    gap: 8px;
+    }
+}

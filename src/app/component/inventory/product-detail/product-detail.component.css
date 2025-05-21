@@ -1,0 +1,142 @@
+/* src/app/product-detail/product-detail.component.css */
+
+/* Main container styling */
+.product-detail-card {
+  max-width: 700px;
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background-color: #fff;
+}
+
+/* Card header styling */
+.product-detail-card mat-card-header {
+  margin-bottom: 25px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.product-detail-card mat-card-title {
+  font-size: 1.8em;
+  font-weight: 700;
+  color: #3f51b5;
+  margin-bottom: 5px;
+}
+
+.product-detail-card mat-card-subtitle {
+  color: #757575;
+  font-size: 0.9em;
+}
+
+/* Form grid layout */
+.product-form-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Info section styling */
+.info-section h3 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  color: #5c6bc0;
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+.info-section h3 mat-icon {
+  margin-right: 10px;
+  color: #424242;
+}
+
+/* Form group grid layout */
+.form-group {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+/* Make form fields take two columns on larger screens */
+@media (min-width: 600px) {
+  .form-group {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+/* Form field styling */
+mat-form-field {
+  width: 100%;
+}
+
+/* Card actions styling */
+mat-card-actions {
+  padding: 20px 0 0;
+  border-top: 1px solid #e0e0e0;
+  margin-top: 25px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.button-container {
+  display: flex;
+  gap: 15px;
+}
+
+.button-container button {
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 4px;
+}
+
+/* Loading and error states */
+.loading-container,
+.error-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  color: #777;
+  font-size: 1.1em;
+padding:20px;
+border-radius:10px;
+max-width:500px;
+background-color:var(--background-color,#f5f5f5);
+box-shadow:02px5pxrgba(0,0,0,0.08);
+}
+
+.loading-containermat-spinner{
+margin:0auto15pxauto;
+}
+
+.error-message{
+color:var(--danger-color,#f44336);
+border:1pxsolidvar(--danger-color,#f44336);
+}
+
+.error-messagemat-icon{
+color:var(--danger-color,#f44336);
+margin-right:10px;
+}
+
+/*Specificstylingforvalidationerrormessagesunderformfields*/
+mat-error{
+font-size:0.75em;
+color:var(--danger-color,#f44336);
+margin-top:4px;
+}
+
+/*AdjustwrapperpaddingforMaterialinputfields*/
+/*TheseareMaterialinternalstylesthatensurecorrectalignment.*/
+.mat-form-field-wrapper{
+padding-bottom:0.5em;/*Helpsalignlabelandinputvisually*/
+}
+
+.mat-form-field-subscript-wrapper{
+margin-top:0;/*Ensureserrormessages/hintsareclosertotheinput*/
+}

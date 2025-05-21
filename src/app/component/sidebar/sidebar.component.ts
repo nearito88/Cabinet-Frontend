@@ -195,13 +195,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'Items List',
-          route: '/panel/inventory/items',
+          route: '/inventory',
           icon: 'fas fa-box',
           isActive: false
         },
         {
           title: 'Add Item',
-          route: '/panel/inventory/items/new',
+          route: '/addproduct',
           icon: 'fas fa-plus',
           isActive: false
         },
@@ -369,8 +369,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
       // The auth service is sending the full decoded token object
       // The role is directly in the claims object
       this.userRole = claims?.role || null;
-      console.log('User role in Sidebar:', this.userRole);
-      console.log('Full Claims Object in Sidebar:', claims); 
       // Update navigation items based on role
       this.updateNavigationItems();
     });

@@ -1,0 +1,77 @@
+<div class="product-list-container">
+    <div class="product-list-header">
+      <h2 class="product-list-title">Product Inventory</h2>
+      <button mat-raised-button color="primary" (click)="addProduct()" class="action-button">
+        <mat-icon>add</mat-icon> Add New Product
+      </button>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading products...</p>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+
+    <div class="table-container" *ngIf="!isLoading && !errorMessage && dataSource.data.length > 0">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let product"> {{ product.productName }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+            <td mat-cell *matCellDef="let product"> {{ product.price | currency:'MAD':'symbol':'1.2-2' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Quantity </th>
+            <td mat-cell *matCellDef="let product"> {{ product.quantity }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="minimum">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Minimum </th>
+            <td mat-cell *matCellDef="let product" [class.low-stock]="product.quantity < product.minimum">
+              {{ product.minimum }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="dateUpdated">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Updated </th>
+            <td mat-cell *matCellDef="let product"> {{ product.dateUpdated | date:'shortDate' }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef> Actions </th>
+            <td mat-cell *matCellDef="let product" class="actions-cell">
+              <button mat-icon-button color="primary" (click)="editProduct(product.productId)" class="action-button edit-button" matTooltip="Edit Product">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="deleteProduct(product.productId)" class="action-button delete-button" matTooltip="Delete Product">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" [attr.colspan]="displayedColumns.length">No products available.</td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && !errorMessage && dataSource.data.length === 0" class="empty-state">
+      <mat-icon class="empty-state-icon">inventory_2</mat-icon> <p>No products found.</p>
+      <p>Click "Add New Product" to create one.</p>
+    </div>
+</div>

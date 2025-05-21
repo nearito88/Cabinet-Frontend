@@ -1,588 +1,272 @@
-:host {
-  display: block;
-  padding: 20px;
-  background-color: var(--mdc-theme-surface);
-  min-height: 100vh;
-}
+/* src/app/add-patient/add-patient.component.css (or similar) */
 
+/* Ensure the main container for the form looks good */
 .patient-card {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 900px; /* Adjust as needed to match service form's width */
+  margin: 20px auto; /* Center the card on the page */
+  padding: 25px;
+  background: var(--background-color, #fff);
   border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  background: var(--mdc-theme-surface);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Match service add card shadow */
+  font-family: 'Roboto', sans-serif;
 }
 
-.patient-card-header {
-  padding: 24px;
-  border-bottom: 1px solid var(--mdc-theme-outline);
-  text-align: center;
+.patient-card mat-card-header {
+  border-bottom: 1px solid var(--border-color, #e9ecef); /* Consistent border */
+  padding-bottom: 15px;
+  margin-bottom: 25px; /* Space after header */
 }
 
-.header-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.title {
-  font-size: 24px;
+.patient-card mat-card-title {
+  font-size: 28px;
   font-weight: 700;
-  color: var(--mdc-theme-primary);
+  color: var(--primary-color, #007bff);
+  margin: 0; /* Remove default margin to let header control spacing */
 }
 
-.patient-card-subtitle {
-  color: var(--mdc-theme-on-primary-container);
-  opacity: 0.8;
-  margin-top: 8px;
+.patient-card mat-card-subtitle {
+  font-size: 16px;
+  color: var(--secondary-color, #6c757d);
+  margin-top: 5px;
 }
 
+/* Styles for the overall form grid */
+.patient-form-grid {
+  display: grid;
+  /* This creates 2 columns on larger screens, adjusting for content */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Flexible columns */
+  gap: 30px; /* Space between the main info sections */
+  margin-bottom: 30px; /* Space before documents section */
+}
+
+/* Style for each 'info-section' (e.g., Personal, Contact, Medical) */
 .info-section {
-  background: var(--mdc-theme-surface-container);
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin: 24px 0;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  width: 100%;
-  height: 100%;
-}
-
-.form-group h3 {
-  margin: 0 0 16px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--mdc-theme-primary);
-  font-weight: 600;
-}
-
-.form-group mat-form-field {
-  width: 100%;
-}
-
-/* Ensure consistent height for all sections */
-.form-group:nth-child(1),
-.form-group:nth-child(2),
-.form-group:nth-child(3) {
-  min-height: 400px;
-}
-
-/* Personal Information fields */
-.form-group:nth-child(1) {
-  display: grid;
-  grid-template-rows: auto 1fr 1fr 1fr 1fr;
-}
-
-/* Contact Information fields */
-.form-group:nth-child(2) {
-  display: grid;
-  grid-template-rows: auto 1fr 1fr;
-}
-
-/* Medical Information fields */
-.form-group:nth-child(3) {
-  display: grid;
-  grid-template-rows: auto 1fr 1fr 1fr;
-}
-
-/* Ensure consistent height for all sections */
-.form-group:nth-child(1),
-.form-group:nth-child(2),
-.form-group:nth-child(3) {
-  min-height: 400px;
-}
-
-.form-group .mat-mdc-form-field {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.form-group .mat-mdc-form-field-wrapper,
-.form-group .mat-mdc-form-field-content,
-.form-group .mat-mdc-form-field-label,
-.form-group .mat-mdc-form-field-flex,
-.form-group .mat-mdc-form-field-outline,
-.form-group .mat-mdc-form-field-outline-thick,
-.form-group .mat-mdc-form-field-outline-gap,
-.form-group .mat-mdc-form-field-outline-notch {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.form-group .age-field .mat-mdc-form-field {
-  height: 48px !important;
-}
-
-.form-group .age-field .mat-mdc-form-field-wrapper,
-.form-group .age-field .mat-mdc-form-field-content,
-.form-group .age-field .mat-mdc-form-field-label {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.form-group h3 {
-  margin: 0 0 16px 0;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: var(--mdc-theme-primary);
-  font-weight: 600;
-}
-
-.form-group mat-icon {
-  color: #007bff;
-  font-size: 20px;
+  background-color: var(--section-bg, #f8f9fa); /* Light background for sections */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow for sections */
 }
 
 .info-section h3 {
-  margin: 0 0 20px 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: var(--mdc-theme-primary);
+  font-size: 18px;
   font-weight: 600;
+  color: var(--dark-color, #343a40);
+  margin-top: 0;
+  margin-bottom: 20px; /* Space below heading */
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-color, #e9ecef); /* Dashed separator */
 }
 
-.info-section mat-icon {
-  color: #007bff;
+.info-section h3 mat-icon {
+  margin-right: 10px;
+  color: var(--primary-color, #007bff);
+  font-size: 24px;
 }
 
+/* Styles for the form-group inside each section (where the fields are) */
 .form-group {
-  display: grid;
-  gap: 20px;
+  display: flex;
+  flex-direction: column; /* Stack form fields vertically */
+  gap: 15px; /* Space between form fields */
 }
 
-.mat-mdc-form-field {
-  height: 48px !important;
-  min-height: 48px !important;
+.form-group mat-form-field {
+  width: 100%; /* Make each form field take full width */
+  margin-bottom: 0; /* Remove default margin as gap handles spacing */
 }
 
-.mat-mdc-form-field-wrapper {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-content {
-  height: 48px !important;
-  min-height: 48px !important;
-  padding: 0 !important;
-}
-
-.mat-mdc-form-field-label {
-  font-size: 14px !important;
-  line-height: 16px !important;
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-flex {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-outline {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-outline-thick {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-outline-gap {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-outline-notch {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
-.mat-mdc-form-field-label {
-  height: 48px !important;
-  min-height: 48px !important;
-}
-
+/* Specific styling for the 'Add Document' and 'Add Medical History' fields */
 .documents-section,
 .medical-history-section {
-  margin-top: 24px;
-  padding: 0 24px;
+  margin-top: 30px; /* Space above these sections */
+  background-color: var(--background-color, #fff); /* White background */
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  border: 1px solid var(--border-color, #e9ecef); /* Light border */
 }
 
 .documents-section h3,
 .medical-history-section h3 {
-  color: var(--mdc-theme-primary);
+  display: flex;
+  align-items: center;
+  font-size: 18px;
   font-weight: 600;
+  color: var(--dark-color, #343a40);
+  margin-top: 0;
   margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-color, #e9ecef);
 }
 
-.documents-section mat-icon,
-.medical-history-section mat-icon {
-  color: var(--mdc-theme-primary);
+.documents-section h3 mat-icon,
+.medical-history-section h3 mat-icon {
+  margin-right: 10px;
+  color: var(--info-color, #17a2b8); /* Different color for these icons */
+  font-size: 24px;
 }
 
-.form-group button {
-  margin-left: 8px;
+/* Style for the add button next to input field */
+.form-group mat-form-field .mat-icon-button {
+  color: var(--primary-color, #007bff);
+  background-color: transparent;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  transition: background-color 0.2s ease;
+}
+
+.form-group mat-form-field .mat-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
 .documents-list,
 .history-list {
-  margin-top: 16px;
-  padding: 16px;
-  background: var(--mdc-theme-surface-container);
-  border-radius: 8px;
+  margin-top: 20px;
 }
 
-.document-item,
-.history-item {
+.documents-list ul,
+.history-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.documents-list .document-item,
+.history-list .history-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  background: var(--mdc-theme-surface);
-  border-radius: 6px;
+  background-color: var(--light-color, #f8f9fa);
+  border: 1px solid var(--border-color, #e9ecef);
+  padding: 10px 15px;
   margin-bottom: 8px;
-  transition: transform 0.2s ease-in-out;
+  border-radius: 5px;
+  font-size: 15px;
+  color: var(--dark-color, #333);
 }
 
-.document-item:hover,
-.history-item:hover {
-  transform: translateX(4px);
+.documents-list .document-item mat-icon,
+.history-list .history-item mat-icon {
+  margin-right: 10px;
+  color: var(--secondary-color, #6c757d);
+  font-size: 20px;
 }
 
-.document-item mat-icon,
-.history-item mat-icon {
-  color: var(--mdc-theme-primary);
+.no-items {
+  color: var(--secondary-color, #6c757d);
+  font-style: italic;
+  text-align: center;
+  padding: 15px;
+  border: 1px dashed var(--border-color, #e9ecef);
+  border-radius: 5px;
+  background-color: var(--light-color, #f8f9fa);
 }
 
-.mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 40px;
-  padding: 48px;
-  background: var(--mdc-theme-surface);
-  border-top: 2px solid var(--mdc-theme-primary);
-  margin-top: 48px;
-}
 
-.mat-card-actions .mdc-button {
-  height: 72px !important;
-  padding: 0 64px !important;
-  border-radius: 40px !important;
-  font-weight: 600 !important;
-  letter-spacing: 1px !important;
-  text-transform: uppercase !important;
-  font-size: 18px !important;
-  transition: all 0.3s ease !important;
-}
-
-.mat-card-actions .mdc-button--raised.mat-primary {
-  min-width: 200px !important;
-  background: var(--mdc-theme-primary) !important;
-  color: white !important;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
-  border: none !important;
-}
-
-.mat-card-actions .mdc-button--raised.mat-primary:hover {
-  transform: translateY(-5px) !important;
-  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3) !important;
-  background: var(--mdc-theme-primary-container) !important;
-}
-
-.mat-card-actions .mdc-button--raised.mat-primary:active {
-  transform: translateY(0) !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2) !important;
-}
-
-.mat-card-actions .mdc-button.mat-primary {
-  min-width: 200px !important;
-  background: transparent !important;
-  color: var(--mdc-theme-primary) !important;
-  border: 3px solid var(--mdc-theme-primary) !important;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1) !important;
-}
-
-.mat-card-actions .mdc-button.mat-primary:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
-  border-color: var(--mdc-theme-primary-container) !important;
-}
-
-.mat-card-actions {
-  display: flex;
-  justify-content: flex-end;
-  padding: 16px;
-  background: var(--mdc-theme-surface);
-  border-top: 1px solid var(--mdc-theme-outline);
-}
-
+/* Button Container at the bottom */
 .button-container {
   display: flex;
-  gap: 16px;
+  justify-content: flex-end;
+  gap: 15px; /* Space between buttons */
+  width: 100%;
 }
 
 .button-container button {
-  min-width: 120px;
-  height: 40px;
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  border-radius: 6px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 0 16px;
+  padding: 10px 25px;
+  font-size: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
 }
 
-.button-container button[mat-raised-button] {
-  background: var(--mdc-theme-primary);
-  color: var(--mdc-theme-on-primary);
-  border: none;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.button-container button mat-icon {
+  margin-right: 8px;
 }
 
-.button-container button[mat-raised-button]:hover {
+/* Specific button styling (if needed, ensure these are consistent with global variables) */
+button[mat-raised-button][color="primary"] {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+}
+
+button[mat-raised-button][color="primary"]:hover {
+  background-color: darken(var(--primary-color, #007bff), 10%); /* Requires Sass, or use specific color */
+  /* Example: background-color: #0056b3; */
   transform: translateY(-1px);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
 }
 
-.button-container button[mat-raised-button]:active {
-  transform: translateY(0);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+button[mat-button] {
+  color: var(--secondary-color, #6c757d);
 }
 
-.button-container button[mat-button] {
-  background: transparent;
-  color: var(--mdc-theme-primary);
-  border: 2px solid var(--mdc-theme-primary);
+button[mat-button]:hover {
+  background-color: rgba(0, 0, 0, 0.04);
 }
 
-.button-container button[mat-button]:hover {
-  background: var(--mdc-theme-primary-container);
-  color: var(--mdc-theme-on-primary-container);
-}
-
-.button-container button[mat-button]:active {
-  background: transparent;
-  color: var(--mdc-theme-primary);
-}
-
-.mat-card-actions .mdc-button.mat-primary:active {
-  transform: translateY(0) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-}
-
-.mat-card-actions .mdc-button .mat-mdc-button-touch-target {
-  height: 72px !important;
-  padding: 0 64px !important;
-  border-radius: 40px !important;
-}
-
-.mat-card-actions .mdc-button .mat-mdc-button-touch-target .mdc-button__label {
-  font-size: 18px !important;
-  font-weight: 600 !important;
-  letter-spacing: 1px !important;
-  text-transform: uppercase !important;
-  margin-left: 16px !important;
-}
-
-.mat-card-actions .mdc-button .mat-mdc-button-touch-target .mat-icon {
-  font-size: 28px !important;
-  margin-right: 16px !important;
-}
-
-.mat-card-actions button[mat-raised-button] {
-  min-width: 140px;
-  background: var(--mdc-theme-primary);
-  color: var(--mdc-theme-on-primary);
-  border: none;
-  position: relative;
-  overflow: hidden;
-}
-
-.mat-card-actions button[mat-raised-button]:hover {
-  background: var(--mdc-theme-primary-container);
-  color: var(--mdc-theme-on-primary-container);
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-}
-
-.mat-card-actions button[mat-raised-button]:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.mat-card-actions button[mat-raised-button]:hover::before {
-  transform: translateX(100%);
-}
-
-.mat-card-actions button[mat-button] {
-  background: transparent;
-  color: var(--mdc-theme-primary);
-  border: 2px solid var(--mdc-theme-primary);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.mat-card-actions button[mat-button]:hover {
-  background: var(--mdc-theme-surface-container);
-  color: var(--mdc-theme-primary);
-  border-color: var(--mdc-theme-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.mat-card-actions button[mat-button]:active {
-  background: var(--mdc-theme-surface-container);
-  color: var(--mdc-theme-primary);
-  border-color: var(--mdc-theme-primary);
-  transform: translateY(0);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.mat-card-actions button mat-icon {
-  margin-right: 10px;
-  font-size: 22px;
-  transition: transform 0.3s ease;
-}
-
-.mat-card-actions button[mat-raised-button]:hover mat-icon {
-  transform: translateY(-2px);
-}
-
-/* Style for age field */
-.age-field {
-  width: 150px;
-  max-width: 150px;
-}
-
-.age-field .mat-form-field-flex {
-  width: 100%;
-}
-
-.age-field .mat-form-field-wrapper {
-  min-width: 150px;
-}
-
-.age-field input {
+/* Loading and Error messages */
+.loading-container,
+.error-message {
   text-align: center;
-  font-weight: 500;
-  height: 32px;
-  line-height: 32px;
-}
-
-.age-field .mat-mdc-form-field {
-  height: 32px !important;
-}
-
-.age-field .mat-mdc-form-field-wrapper {
-  height: 32px !important;
-}
-
-.age-field .mat-mdc-form-field-content {
-  height: 32px !important;
-  padding: 0 !important;
-}
-
-.age-field .mat-mdc-form-field-label {
-  font-size: 14px !important;
-  line-height: 16px !important;
-}
-
-.loading-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--light-color, #f8f9fa);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: var(--dark-color, #333);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  background: rgba(255, 255, 255, 0.9);
-  z-index: 1000;
-}
-
-.loading-container p {
-  margin-top: 16px;
-  color: var(--mdc-theme-primary);
-  font-weight: 500;
 }
 
 .error-message {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 16px;
-  background: var(--mdc-theme-error-container);
-  color: var(--mdc-theme-on-error-container);
-  border-radius: 8px;
-  margin: 16px 24px;
-  font-weight: 500;
+  color: var(--danger-color, #dc3545);
+  background-color: #ffebee; /* Light red background for error */
 }
 
 .error-message mat-icon {
-  color: var(--mdc-theme-on-error-container);
-}
-
-.success {
-  color: var(--mdc-theme-success);
+  font-size: 32px;
   margin-bottom: 10px;
+  color: var(--danger-color, #dc3545);
 }
 
-.error {
-  color: var(--mdc-theme-error);
-  margin-bottom: 10px;
-}
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .patient-card {
+      padding: 15px;
+      margin: 15px auto;
+  }
 
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
+  .patient-card mat-card-title {
+      font-size: 24px;
+      padding-bottom: 10px;
+  }
 
-input[type="text"],
-input[type="email"],
-input[type="number"],
-input[type="date"] {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
+  .patient-form-grid {
+      grid-template-columns: 1fr; /* Stack columns on smaller screens */
+      gap: 20px;
+  }
 
-div {
-  margin-bottom: 15px;
-}
+  .info-section,
+  .documents-section,
+  .medical-history-section {
+      padding: 15px;
+  }
 
-button {
-  padding: 10px 15px;
-  cursor: pointer;
-  margin-right: 10px;
-}
+  .info-section h3,
+  .documents-section h3,
+  .medical-history-section h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+  }
 
-button[type="submit"]:disabled {
-  background-color: #ccc;
-  color: #666;
-  cursor: not-allowed;
+  .button-container {
+      flex-direction: column; /* Stack buttons vertically */
+      gap: 10px;
+  }
+
+  .button-container button {
+      width: 100%; /* Full width buttons */
+  }
 }

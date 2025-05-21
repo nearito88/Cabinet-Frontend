@@ -10,6 +10,9 @@ import { AddPatientComponent } from './component/patients/patient-form/patient-f
 import { CabinetServiceListComponent } from './component/cabinet-service/service-list/service-list.component';
 import { CabinetServiceDetailComponent } from './component/cabinet-service/service-detail/service-detail.component';
 import { CabinetServiceAddComponent } from './component/cabinet-service/service-form/service-form.component';
+import { ProductListComponent } from './component/inventory/product-list/product-list.component';
+import { ProductDetailComponent } from './component/inventory/product-detail/product-detail.component';
+import { ProductAddComponent } from './component/inventory/product-form/product-form.component';
 // Public routes (no authentication required)
 export const publicRoutes: Routes = [
   { 
@@ -45,7 +48,10 @@ export const protectedRoutes: Routes = [
       { path: 'services', component: CabinetServiceListComponent },
       { path: 'services/:id', component: CabinetServiceDetailComponent },
       { path: 'addservice', component: CabinetServiceAddComponent },
-
+      // Inventory
+      { path: 'inventory', component: ProductListComponent },
+      { path: 'inventory/:id', component: ProductDetailComponent },
+      { path: 'addproduct', component: ProductAddComponent },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
     ]

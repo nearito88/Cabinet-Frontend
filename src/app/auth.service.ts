@@ -39,10 +39,7 @@ export class AuthService implements OnDestroy {
         if (user) {
           try {
             const token = await getIdToken(user, true); // Force refresh
-            console.log('Raw ID Token (Forced Refresh) in AuthService:', token);
             const decodedToken = this.decodeToken(token);
-            console.log('Decoded Token in AuthService:', decodedToken);
-
             const claims = decodedToken?.role ? { role: decodedToken.role } : null; // Directly extract role
             this.userClaimsSubject.next(claims as UserClaims || null);
             console.log('AuthService emitting userClaims:', claims); // Log what's being emitted
