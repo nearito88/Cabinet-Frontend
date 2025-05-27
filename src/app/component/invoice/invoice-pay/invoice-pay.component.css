@@ -1,0 +1,191 @@
+/* Reusing variables from your product-add.component.css for consistency */
+:root {
+    --primary-color: #3f51b5;
+    --secondary-color: #5c6bc0;
+    --warn-color: #f44336;
+    --text-muted-color: #757575;
+    --icon-color: #424242;
+    --border-color: #e0e0e0;
+    --card-background-color: #ffffff;
+    --background-color: #f5f5f5;
+    --danger-color: #f44336;
+  }
+  
+  .invoice-pay-card {
+    max-width: 600px; /* Slightly narrower than add product for payment forms */
+    margin: 30px auto;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background-color: var(--card-background-color, #ffffff);
+    position: relative; /* For loading overlay */
+  }
+  
+  .invoice-pay-card mat-card-header {
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    padding-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .invoice-pay-card mat-card-title {
+    font-size: 1.6em; /* Slightly smaller for payment form */
+    font-weight: 700;
+    color: var(--primary-color, #3f51b5);
+    margin-bottom: 5px;
+  }
+  
+  .invoice-pay-card mat-card-subtitle {
+    color: var(--text-muted-color, #757575);
+    font-size: 0.9em;
+  }
+  
+  .invoice-summary {
+    background-color: #f0f4f8; /* Light blue background */
+    border: 1px solid #d0dbe6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .invoice-summary p {
+    margin: 5px 0;
+    font-size: 0.95em;
+    color: #333;
+  }
+  
+  .invoice-summary strong {
+    color: #000;
+  }
+  
+  mat-chip-listbox {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px; /* Space from "Status:" text */
+  }
+  
+  mat-chip {
+    height: 25px;
+    padding: 0 10px;
+    font-size: 0.8em;
+    font-weight: 500;
+    line-height: 25px;
+    border-radius: 12px;
+    transition: background-color 0.2s ease;
+  }
+  
+  /* Custom colors for chips if not provided by Angular Material themes */
+  mat-chip[color="primary"] {
+    background-color: var(--primary-color, #3f51b5);
+    color: #fff;
+  }
+  
+  mat-chip[color="warn"] {
+    background-color: var(--warn-color, #f44336);
+    color: #fff;
+  }
+  
+  
+  .info-section h3 {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    color: var(--secondary-color, #5c6bc0);
+    font-size: 1.1em; /* Slightly smaller */
+    font-weight: 600;
+  }
+  
+  .info-section h3 mat-icon {
+    margin-right: 10px;
+    color: var(--icon-color, #424242);
+  }
+  
+  .form-group {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  @media (min-width: 600px) {
+    .form-group {
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
+  }
+  
+  mat-form-field {
+    width: 100%;
+  }
+  
+  mat-card-actions {
+    padding: 20px 0 0;
+    border-top: 1px solid var(--border-color, #e0e0e0);
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .button-container {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .button-container button {
+    padding: 10px 20px; /* Slightly less padding */
+    font-size: 15px; /* Slightly smaller font */
+    border-radius: 8px;
+  }
+  
+  .loading-container, .error-message {
+    text-align: center;
+    margin: 20px auto; /* Adjust margin for modals/smaller spaces */
+    padding: 15px; /* Adjust padding */
+    border-radius: 8px; /* Slightly smaller radius */
+    max-width: 400px; /* Adjust max width */
+    background-color: var(--background-color, #f5f5f5);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+  }
+  
+  .loading-container mat-spinner {
+    margin: 0 auto 10px auto;
+  }
+  
+  .error-message {
+    color: var(--danger-color, #f44336);
+    border: 1px solid var(--danger-color, #f44336);
+  }
+  
+  .error-message mat-icon {
+    color: var(--danger-color, #f44336);
+    margin-right: 8px;
+  }
+  
+  mat-error {
+    font-size: 0.7em; /* Slightly smaller error font */
+    color: var(--danger-color, #f44336);
+    margin-top: 2px; /* Less top margin */
+  }
+  
+  .mat-form-field-wrapper {
+    padding-bottom: 0.3em; /* Less padding */
+  }
+  
+  .mat-form-field-subscript-wrapper {
+    margin-top: 0;
+  }
+  
+  .loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Ensure it's above other content */
+    border-radius: 12px; /* Match card border-radius */
+  }

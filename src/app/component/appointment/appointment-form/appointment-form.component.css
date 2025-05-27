@@ -1,0 +1,260 @@
+/* Define CSS Variables for consistency (can be moved to a global stylesheet for app-wide use) */
+:host {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --info-color: #17a2b8;
+    --dark-color: #343a40;
+    --light-color: #f8f9fa;
+    --background-color: #ffffff;
+    --section-bg: #f8f9fa; /* Light background for sections */
+    --border-color: #e9ecef;
+    --danger-color: #dc3545;
+    --success-color: #28a745; /* Added for success messages */
+  }
+  
+  /* Container for the entire form card, centering it on the page */
+  .appointment-form-container {
+    display: flex;
+    flex-direction: column; /* Stack card and messages vertically */
+    justify-content: center;
+    align-items: center; /* Center horizontally */
+    padding: 20px;
+    min-height: calc(100vh - 64px); /* Adjust based on your actual header/footer height */
+    background-color: var(--light-color); /* Use a light background for the page */
+  }
+  
+  /* Styles for the main material card */
+  .appointment-card {
+    max-width: 900px; /* Adjust as needed */
+    width: 100%; /* Ensure it takes full width up to max-width */
+    margin: 20px auto; /* Center the card on the page */
+    padding: 25px;
+    background: var(--background-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    position: relative; /* Needed for positioning overlay elements like loading spinner */
+  }
+  
+  .appointment-card mat-card-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .appointment-card mat-card-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+    text-align: center;
+  }
+  
+  .appointment-card mat-card-subtitle {
+    font-size: 16px;
+    color: var(--secondary-color);
+    margin-top: 5px;
+    text-align: center;
+  }
+  
+  /* Styles for the overall form grid */
+  .appointment-form-grid {
+    display: grid;
+    /* This creates 2 columns on larger screens, adjusting for content */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Flexible columns, slightly wider min for fields */
+    gap: 30px; /* Space between the main info sections */
+    margin-bottom: 30px;
+  }
+  
+  /* Style for each 'info-section' (e.g., Participants, Date & Time, Status & Payment) */
+  .info-section {
+    background-color: var(--section-bg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .info-section.full-width-section {
+    grid-column: 1 / -1; /* Make this section span all columns */
+  }
+  
+  .info-section h3 {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+  }
+  
+  .info-section h3 mat-icon {
+    margin-right: 10px;
+    color: var(--primary-color); /* Primary color for section icons */
+    font-size: 24px;
+  }
+  
+  /* Styles for the form-group inside each section (where the fields are) */
+  .form-group {
+    display: flex;
+    flex-direction: column; /* Stack form fields vertically */
+    gap: 15px; /* Space between form fields */
+  }
+  
+  /* For fields that should appear side-by-side on one row */
+  .form-group-inline {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap; /* Allow wrapping on smaller screens */
+  }
+  
+  .form-group-inline .half-width {
+    flex: 1 1 calc(50% - 7.5px); /* Two columns, considering the gap */
+    min-width: 150px; /* Minimum width before wrapping */
+  }
+  
+  .form-group mat-form-field {
+    width: 100%; /* Make each form field take full width by default */
+    margin-bottom: 0; /* Remove default margin as gap handles spacing */
+  }
+  
+  /* Adjust checkbox styling */
+  mat-checkbox {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-left: 5px; /* Align checkbox with form fields */
+  }
+  
+  /* Button Container at the bottom */
+  .button-container {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px; /* Space between buttons */
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  .button-container button {
+    padding: 10px 25px;
+    font-size: 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .button-container button mat-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  
+  /* Specific button styling */
+  button[mat-raised-button][color="primary"] {
+    background-color: var(--primary-color);
+    color: white;
+  }
+  
+  button[mat-raised-button][color="primary"]:hover {
+    background-color: #0056b3; /* A slightly darker shade of primary-color */
+    transform: translateY(-1px);
+  }
+  
+  button[mat-button] {
+    color: var(--secondary-color);
+  }
+  
+  button[mat-button]:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+  }
+  
+  /* Loading, Error, and Success messages */
+  .loading-container,
+  .error-message,
+  .success-message {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px; /* Limit width for messages */
+    width: 100%;
+  }
+  
+  .loading-container {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+  }
+  
+  .error-message {
+    color: var(--danger-color);
+    background-color: #ffebee; /* Light red background for error */
+  }
+  
+  .error-message mat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--danger-color);
+  }
+  
+  .success-message {
+    color: var(--success-color); /* Use the newly defined success color */
+    background-color: #e6ffed; /* Light green background for success */
+  }
+  
+  .success-message mat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--success-color);
+  }
+  
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .appointment-card {
+      padding: 15px;
+      margin: 15px auto;
+    }
+  
+    .appointment-card mat-card-title {
+      font-size: 24px;
+      padding-bottom: 10px;
+    }
+  
+    .appointment-form-grid {
+      grid-template-columns: 1fr; /* Stack columns on smaller screens */
+      gap: 20px;
+    }
+  
+    .info-section {
+      padding: 15px;
+    }
+  
+    .info-section h3 {
+      font-size: 16px;
+      margin-bottom: 15px;
+    }
+  
+    .form-group {
+      gap: 10px;
+    }
+  
+    .form-group-inline {
+      flex-direction: column; /* Stack inline fields vertically on small screens */
+    }
+  
+    .form-group-inline .half-width {
+      flex: 1 1 100%; /* Full width for each stacked field */
+    }
+  
+    .button-container {
+      flex-direction: column; /* Stack buttons vertically */
+      gap: 10px;
+    }
+  
+    .button-container button {
+      width: 100%; /* Full width buttons */
+    }
+  }

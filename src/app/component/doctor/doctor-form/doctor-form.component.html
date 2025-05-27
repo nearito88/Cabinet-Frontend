@@ -1,0 +1,105 @@
+<div class="doctor-form-container">
+    <mat-card class="doctor-card">
+      <mat-card-header>
+        <mat-card-title>Add New Doctor</mat-card-title> <mat-card-subtitle>Enter doctor information to create a new record</mat-card-subtitle> </mat-card-header>
+  
+      <mat-card-content>
+        <form class="doctor-form-grid" (ngSubmit)="saveDoctor(doctorForm)" #doctorForm="ngForm">
+  
+          <div class="info-section">
+            <h3><mat-icon>person</mat-icon> Personal Information</h3>
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="doctor.name" name="name" required #name="ngModel">
+                <mat-error *ngIf="name.invalid && name.touched">Name is required.</mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline" class="age-field">
+                <mat-label>Age</mat-label>
+                <input matInput type="number" [(ngModel)]="doctor.age" name="age" min="18" max="120" required #age="ngModel">
+                <mat-error *ngIf="age.invalid && age.touched">
+                  <span *ngIf="age.errors?.['required']">Age is required.</span>
+                  <span *ngIf="age.errors?.['min'] || age.errors?.['max']">Age must be between 18 and 120.</span>
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select [(ngModel)]="doctor.gender" name="gender" required #gender="ngModel">
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                </mat-select>
+                <mat-error *ngIf="gender.invalid && gender.touched">Gender is required.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="info-section">
+            <h3><mat-icon>phone</mat-icon> Contact Information</h3>
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput [(ngModel)]="doctor.phone" name="phone" required pattern="^\+?\d{8,15}$" #phone="ngModel">
+                <mat-error *ngIf="phone.invalid && phone.touched">
+                  <span *ngIf="phone.errors?.['required']">Phone number is required.</span>
+                  <span *ngIf="phone.errors?.['pattern']">Enter a valid phone number (e.g., +212XXXXXXXXX).</span>
+                </mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" [(ngModel)]="doctor.email" name="email" required email #email="ngModel">
+                <mat-error *ngIf="email.invalid && email.touched">
+                  <span *ngIf="email.errors?.['required']">Email is required.</span>
+                  <span *ngIf="email.errors?.['email']">Enter a valid email address.</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="info-section">
+            <h3><mat-icon>work</mat-icon> Professional Information</h3>
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Specialization</mat-label>
+                <input matInput [(ngModel)]="doctor.specialization" name="specialization" required #specialization="ngModel">
+                <mat-error *ngIf="specialization.invalid && specialization.touched">Specialization is required.</mat-error>
+              </mat-form-field>
+  
+              <mat-form-field appearance="outline">
+                <mat-label>Date Joined</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="doctor.dateJoined" name="dateJoined" required #dateJoined="ngModel">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="dateJoined.invalid && dateJoined.touched">Date Joined is required.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <div class="button-container">
+          <button mat-raised-button color="primary" (click)="saveDoctor(doctorForm)" [disabled]="isSaving || doctorForm.invalid">
+            <mat-icon *ngIf="isSaving">loop</mat-icon>
+            <mat-icon *ngIf="!isSaving">person_add</mat-icon>
+            {{ isSaving ? 'Adding...' : 'Add Doctor' }}
+          </button>
+          <button mat-button (click)="cancel()" [disabled]="isSaving">
+            <mat-icon>close</mat-icon> Cancel
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  
+    <div *ngIf="isSaving" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Adding new doctor...</p>
+    </div>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+  </div>

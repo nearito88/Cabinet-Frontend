@@ -1,0 +1,169 @@
+<div class="appointment-form-container">
+    <mat-card class="appointment-card">
+      <mat-card-header>
+        <mat-card-title>Schedule New Appointment</mat-card-title>
+        <mat-card-subtitle>Fill in the details for the appointment.</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form #appointmentFormRef="ngForm" (ngSubmit)="saveAppointment(appointmentFormRef)">
+          <div class="appointment-form-grid">
+  
+            <div class="info-section">
+              <h3><mat-icon>group</mat-icon>Participants</h3>
+              <div class="form-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Patient</mat-label>
+                  <mat-select name="patientId" [(ngModel)]="appointment.patientId" required>
+                    <mat-option *ngFor="let patient of patients" [value]="patient.patientId">
+                      {{ patient.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="appointmentFormRef.controls['patientId']?.errors?.['required']">
+                    Patient is required
+                  </mat-error>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Doctor</mat-label>
+                  <mat-select name="doctorId" [(ngModel)]="appointment.doctorId">
+                    <mat-option>-- None --</mat-option>
+                    <mat-option *ngFor="let doctor of doctors" [value]="doctor.doctorId">
+                      {{ doctor.name }} ({{ doctor.specialization }})
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Service</mat-label>
+                  <mat-select name="serviceId" [(ngModel)]="appointment.serviceId" required>
+                    <mat-option *ngFor="let service of services" [value]="service.serviceId">
+                      {{ service.serviceName }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="appointmentFormRef.controls['serviceId']?.errors?.['required']">
+                    Service is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+  
+            <div class="info-section">
+              <h3><mat-icon>event</mat-icon>Date & Time</h3>
+              <div class="form-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Date</mat-label>
+                  <input matInput [matDatepicker]="picker" name="dateAppointment" [(ngModel)]="appointment.dateAppointment" required>
+                  <mat-hint>MM/DD/YYYY</mat-hint>
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                  <mat-error *ngIf="appointmentFormRef.controls['dateAppointment']?.errors?.['required']">
+                    Date is required
+                  </mat-error>
+                </mat-form-field>
+  
+                <div class="form-group-inline">
+                  <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>Start Time</mat-label>
+                    <input matInput type="time" name="startTime" [(ngModel)]="appointment.startTime" required>
+                    <mat-error *ngIf="appointmentFormRef.controls['startTime']?.errors?.['required']">
+                      Start Time is required
+                    </mat-error>
+                  </mat-form-field>
+  
+                  <mat-form-field appearance="outline" class="half-width">
+                    <mat-label>End Time</mat-label>
+                    <input matInput type="time" name="endTime" [(ngModel)]="appointment.endTime" required>
+                    <mat-error *ngIf="appointmentFormRef.controls['endTime']?.errors?.['required']">
+                      End Time is required
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+  
+            <div class="info-section">
+              <h3><mat-icon>credit_card</mat-icon>Status & Payment</h3>
+              <div class="form-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Appointment Status</mat-label>
+                  <mat-select name="appointmentStatus" [(ngModel)]="appointment.appointmentStatus" required>
+                    <mat-option value="SCHEDULED">Scheduled</mat-option>
+                    <mat-option value="COMPLETED">Completed</mat-option>
+                    <mat-option value="CANCELLED">Cancelled</mat-option>
+                    <mat-option value="PENDING">Pending</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="appointmentFormRef.controls['appointmentStatus']?.errors?.['required']">
+                    Status is required
+                  </mat-error>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Payment Status</mat-label>
+                  <mat-select name="paymentStatus" [(ngModel)]="appointment.paymentStatus" required>
+                    <mat-option value="PENDING">Pending</mat-option>
+                    <mat-option value="PARTIALLY_PAID">Partially Paid</mat-option>
+                    <mat-option value="PAID">Paid</mat-option>
+                    <mat-option value="CANCELLED">Cancelled</mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="appointmentFormRef.controls['paymentStatus']?.errors?.['required']">
+                    Payment Status is required
+                  </mat-error>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Total Amount</mat-label>
+                  <input matInput type="number" name="totalAmount" [(ngModel)]="appointment.totalAmount" required min="0">
+                  <mat-error *ngIf="appointmentFormRef.controls['totalAmount']?.errors?.['required']">
+                    Amount is required
+                  </mat-error>
+                  <mat-error *ngIf="appointmentFormRef.controls['totalAmount']?.errors?.['min']">
+                    Amount must be non-negative
+                  </mat-error>
+                </mat-form-field>
+  
+                <mat-checkbox name="isRelated" [(ngModel)]="appointment.isRelated" class="mat-form-field-wrapper">
+                  Is Related Appointment
+                </mat-checkbox>
+              </div>
+            </div>
+  
+            <div class="info-section full-width-section">
+              <h3><mat-icon>info</mat-icon>Description</h3>
+              <div class="form-group">
+                <mat-form-field appearance="outline">
+                  <mat-label>Additional Notes</mat-label>
+                  <textarea matInput name="description" [(ngModel)]="appointment.description" rows="3"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+  
+          </div>
+  
+          <mat-card-actions class="button-container">
+            <button mat-button type="button" (click)="cancel()">
+              <mat-icon>cancel</mat-icon>Cancel
+            </button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="isSaving">
+              <mat-icon>save</mat-icon> {{ isSaving ? 'Saving...' : 'Save Appointment' }}
+            </button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  
+    <div *ngIf="isSaving" class="loading-container">
+      <mat-spinner [diameter]="40"></mat-spinner>
+      <p>Saving appointment...</p>
+    </div>
+  
+    <div *ngIf="successMessage" class="success-message">
+      <mat-icon>check_circle</mat-icon>
+      <p>{{ successMessage }}</p>
+    </div>
+  
+    <div *ngIf="errorMessage" class="error-message">
+      <mat-icon>error</mat-icon>
+      <p>{{ errorMessage }}</p>
+    </div>
+  </div>

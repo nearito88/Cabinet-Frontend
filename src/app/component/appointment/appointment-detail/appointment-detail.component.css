@@ -1,0 +1,359 @@
+/* src/app/appointment-detail/appointment-detail.component.css */
+
+/* Reuse the general styles from your application's root or a shared stylesheet */
+:host {
+    --primary-color: #3f51b5;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --info-color: #17a2b8;
+    --dark-color: #343a40;
+    --light-color: #f8f9fa;
+    --background-color: #f0f2f5;
+    --card-background: #ffffff;
+    --border-color: #e9ecef;
+    --danger-color: #dc3545;
+    --hover-color: #f5f5f5;
+    --text-color: #333;
+
+    /* Status Colors */
+    --status-scheduled-bg: #e3f2fd;
+    --status-scheduled-text: #2196f3;
+    --status-completed-bg: #e8f5e9;
+    --status-completed-text: #4caf50;
+    --status-cancelled-bg: #ffebee;
+    --status-cancelled-text: #f44336;
+    --status-pending-bg: #fffde7;
+    --status-pending-text: #ffc107;
+}
+
+.appointment-form-container { /* Renamed from original for better semantic */
+    padding: 20px;
+    background-color: var(--background-color);
+    min-height: calc(100vh - 64px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top */
+    box-sizing: border-box;
+}
+
+.appointments-card { /* Using this class as it appears in your form HTML */
+    max-width: 900px; /* Max width for the card, adjust as needed */
+    width: 100%;
+    background: var(--card-background);
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin-bottom: 25px; /* Add margin-bottom if needed */
+}
+
+.appointments-card mat-card-header {
+  margin-bottom: 20px;
+}
+
+.appointments-card mat-card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  text-align: center;
+}
+
+.appointments-card mat-card-subtitle {
+  font-size: 16px;
+  color: var(--secondary-color);
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* Grid layout for form sections */
+.appointment-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+/* Info section styling */
+.info-section {
+  background-color: var(--section-bg);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-section h3 {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--dark-color);
+  margin-top: 0;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px dashed var(--border-color);
+}
+
+.info-section h3 mat-icon {
+  margin-right: 10px;
+  color: var(--primary-color);
+  font-size: 24px;
+}
+
+/* Form group styling */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-group mat-form-field {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+/* Button container styling */
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  width: 100%;
+}
+
+.button-container button {
+  padding: 10px 25px;
+  font-size: 15px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.button-container button mat-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+/* Button specific styles */
+button[mat-raised-button][color="primary"] {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+button[mat-raised-button][color="primary"]:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+button[mat-button] {
+  color: var(--secondary-color);
+}
+
+button[mat-button]:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* Loading and error states */
+.spinner-container,
+.error-message {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: var(--light-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: var(--dark-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.error-message {
+  color: var(--danger-color);
+  background-color: #ffebee;
+}
+
+.error-message mat-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: var(--danger-color);
+}
+
+/* Success message styling */
+.success-message {
+  text-align: center;
+  margin-top: 30px;
+  padding: 20px;
+  border-radius: 8px;
+  background-color: #d4edda;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  color: #155724;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.success-message mat-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: #155724;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .appointments-card {
+    padding: 15px;
+    margin: 15px auto;
+  }
+
+  .appointments-card mat-card-title {
+    font-size: 24px;
+    padding-bottom: 10px;
+  }
+
+  .appointment-form-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .info-section {
+    padding: 15px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .button-container button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Status Chip Styles */
+.mat-chip-row {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 0.85em;
+  text-align: center;
+  min-width: 80px;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.status-scheduled {
+  background-color: var(--status-scheduled-bg);
+  color: var(--status-scheduled-text);
+  border: 1px solid var(--status-scheduled-text); /* Added border */
+}
+
+.status-completed {
+  background-color: var(--status-completed-bg);
+  color: var(--status-completed-text);
+  border: 1px solid var(--status-completed-text);
+}
+
+.status-cancelled {
+  background-color: var(--status-cancelled-bg);
+  color: var(--status-cancelled-text);
+  border: 1px solid var(--status-cancelled-text);
+}
+
+.status-pending {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending-text);
+  border: 1px solid var(--status-pending-text);
+}
+
+.status-default { /* Fallback for unknown status */
+  background-color: var(--light-color);
+  color: var(--secondary-color);
+  border: 1px solid var(--border-color);
+}
+
+
+/* Button Container */
+.button-container {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 15px; /* Space between buttons */
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.button-container button {
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.button-container button mat-icon {
+    margin-right: 8px;
+}
+
+.button-container button[mat-button] {
+    color: var(--secondary-color);
+}
+
+.button-container button[mat-button]:hover {
+    background-color: var(--hover-color);
+}
+
+.button-container button[mat-raised-button] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.button-container button[mat-raised-button]:hover {
+    background-color: #30419e; /* Darken primary on hover */
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .appointment-form-container {
+        padding: 10px;
+    }
+
+    .appointments-card {
+        padding: 20px;
+    }
+
+    .appointments-card mat-card-title {
+        font-size: 24px;
+    }
+
+    .info-section {
+        padding: 15px;
+    }
+
+    .appointment-form-grid {
+        grid-template-columns: 1fr; /* Single column on small screens */
+        gap: 20px;
+    }
+
+    .detail-item-inline {
+      flex-direction: column; /* Stack inline items vertically */
+      gap: 15px;
+    }
+
+    .half-width {
+      width: 100%;
+      flex: none; /* Remove flex sizing */
+    }
+
+    .button-container {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: stretch; /* Stretch buttons to full width */
+    }
+
+    .button-container button {
+        width: 100%;
+        margin-bottom: 10px; /* Space between stacked buttons */
+    }
+}

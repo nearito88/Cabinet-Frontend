@@ -1,0 +1,103 @@
+<div class="doctor-details-container">
+    <div *ngIf="isLoading" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading doctor details...</p>
+    </div>
+  
+    <div *ngIf="errorMessage && !isLoading" class="error-message">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+  
+    <mat-card *ngIf="!isLoading && !errorMessage && receptionist" class="doctor-card">
+      <mat-card-header>
+        <mat-card-title>EDIT Receptionist</mat-card-title>
+        <mat-card-subtitle>Receptionist ID: {{ receptionist.receptionistId }}</mat-card-subtitle>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form class="doctor-info-grid" #receptionistForm="ngForm" (ngSubmit)="updateReceptionist(receptionistForm)">
+          <div class="info-section">
+            <h3><mat-icon>person</mat-icon> Personal Information</h3>
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput [(ngModel)]="receptionist.name" name="name" required #name="ngModel">
+                <mat-error *ngIf="name.invalid && name.touched">Name is required.</mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Age</mat-label>
+                <input matInput type="number" [(ngModel)]="receptionist.age" name="age" min="18" max="120" required #age="ngModel">
+                <mat-error *ngIf="age.invalid && age.touched">
+                  <span *ngIf="age.errors?.['required']">Age is required.</span>
+                  <span *ngIf="age.errors?.['min'] || age.errors?.['max']">Age must be between 18 and 120.</span>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Gender</mat-label>
+                <mat-select [(ngModel)]="receptionist.gender" name="gender" required #gender="ngModel">
+                  <mat-option value="Male">Male</mat-option>
+                  <mat-option value="Female">Female</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                </mat-select>
+                <mat-error *ngIf="gender.invalid && gender.touched">Gender is required.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="info-section">
+            <h3><mat-icon>phone</mat-icon> Contact Information</h3>
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Phone</mat-label>
+                <input matInput [(ngModel)]="receptionist.phone" name="phone" required pattern="^\+?\d{8,15}$" #phone="ngModel">
+                <mat-error *ngIf="phone.invalid && phone.touched">
+                  <span *ngIf="phone.errors?.['required']">Phone number is required.</span>
+                  <span *ngIf="phone.errors?.['pattern']">Enter a valid phone number (e.g., +212XXXXXXXXX).</span>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" [(ngModel)]="receptionist.email" name="email" required email #email="ngModel">
+                <mat-error *ngIf="email.invalid && email.touched">
+                  <span *ngIf="email.errors?.['required']">Email is required.</span>
+                  <span *ngIf="email.errors?.['email']">Enter a valid email address.</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          <div class="info-section">
+            <h3><mat-icon>work</mat-icon> Professional Information</h3>
+            <div class="form-group">
+              <mat-form-field appearance="outline">
+                <mat-label>Date Joined</mat-label>
+                <input matInput [matDatepicker]="picker" [(ngModel)]="receptionist.dateJoined" name="dateJoined" required #dateJoined="ngModel">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                <mat-error *ngIf="dateJoined.invalid && dateJoined.touched">Date Joined is required.</mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+  
+          </form>
+      </mat-card-content>
+  
+      <mat-card-actions>
+        <div class="button-container">
+          <button mat-raised-button color="primary" (click)="updateReceptionist(receptionistForm)" [disabled]="isSaving || receptionistForm.invalid">
+            <mat-icon *ngIf="!isSaving">save</mat-icon>
+            <mat-icon *ngIf="isSaving">loop</mat-icon>
+            {{ isSaving ? 'Saving...' : 'Save Changes' }}
+          </button>
+          <button mat-button (click)="cancel()" [disabled]="isSaving">
+            <mat-icon>close</mat-icon> Cancel
+          </button>
+        </div>
+      </mat-card-actions>
+    </mat-card>
+  
+    <div *ngIf="isSaving" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Updating doctor...</p>
+    </div>
+  </div>

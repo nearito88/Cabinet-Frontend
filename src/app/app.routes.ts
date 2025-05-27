@@ -13,6 +13,17 @@ import { CabinetServiceAddComponent } from './component/cabinet-service/service-
 import { ProductListComponent } from './component/inventory/product-list/product-list.component';
 import { ProductDetailComponent } from './component/inventory/product-detail/product-detail.component';
 import { ProductAddComponent } from './component/inventory/product-form/product-form.component';
+import { DoctorListComponent } from './component/doctor/doctor-list/doctor-list.component';
+import { DoctorDetailsComponent } from './component/doctor/doctor-detail/doctor-detail.component';
+import { DoctorFormComponent } from './component/doctor/doctor-form/doctor-form.component';
+import { AppointmentListComponent } from './component/appointment/appointment-list/appointment-list.component';
+import { AppointmentDetailComponent } from './component/appointment/appointment-detail/appointment-detail.component';
+import { AppointmentFormComponent } from './component/appointment/appointment-form/appointment-form.component';
+import { ReceptionistListComponent } from './component/receptionist/receptionist-list/receptionist-list.component';
+import { ReceptionistDetailsComponent } from './component/receptionist/receptionist-detail/receptionist-detail.component';
+import { ReceptionistFormComponent } from './component/receptionist/receptionist-form/receptionist-form.component';
+import { InvoiceListComponent } from './component/invoice/invoice-list/invoice-list.component';
+import { InvoiceFormComponent } from './component/invoice/invoice-form/invoice-form.component';
 // Public routes (no authentication required)
 export const publicRoutes: Routes = [
   { 
@@ -41,17 +52,33 @@ export const protectedRoutes: Routes = [
     children: [
       { path: 'dashboard', component: DashboardComponent },
         // Patient
-      { path: 'patients', component: PatientListComponent }, // Patient list
-      { path: 'patients/:id', component: PatientDetailComponent }, // Edit patient
-      { path: 'addpatient', component: AddPatientComponent }, // Add patient (top-level protected)
+      { path: 'patients', component: PatientListComponent , title: 'Patient List' }, // Patient list
+      { path: 'patients/:id', component: PatientDetailComponent , title: 'Patient Details' }, // Edit patient
+      { path: 'addpatient', component: AddPatientComponent , title: 'Add Patient' }, // Add patient (top-level protected)
         // Service
-      { path: 'services', component: CabinetServiceListComponent },
-      { path: 'services/:id', component: CabinetServiceDetailComponent },
-      { path: 'addservice', component: CabinetServiceAddComponent },
-      // Inventory
-      { path: 'inventory', component: ProductListComponent },
-      { path: 'inventory/:id', component: ProductDetailComponent },
-      { path: 'addproduct', component: ProductAddComponent },
+      { path: 'services', component: CabinetServiceListComponent , title: 'Service List' },
+      { path: 'services/:id', component: CabinetServiceDetailComponent , title: 'Service Details' },
+      { path: 'addservice', component: CabinetServiceAddComponent , title: 'Add Service' },
+        // Inventory
+      { path: 'inventory', component: ProductListComponent , title: 'Inventory List' },
+      { path: 'inventory/:id', component: ProductDetailComponent , title: 'Inventory Details' },
+      { path: 'addproduct', component: ProductAddComponent , title: 'Add Inventory' },
+        // Doctors
+      { path: 'doctor', component: DoctorListComponent , title: 'Doctor List' },
+      { path: 'doctor/:id', component: DoctorDetailsComponent , title: 'Doctor Details' },
+      { path: 'adddoctor', component: DoctorFormComponent , title: 'Add Doctor' },
+        // Appointments
+      { path: 'appointments', component: AppointmentListComponent , title: 'Appointment List' },
+      { path: 'appointments/:id', component: AppointmentDetailComponent , title: 'Appointment Details' },
+      { path: 'addappointment', component: AppointmentFormComponent , title: 'Add Appointment' },
+        // Receptionists 
+      { path: 'receptionists', component: ReceptionistListComponent , title: 'Receptionist List' },
+      { path: 'receptionists/:id', component: ReceptionistDetailsComponent , title: 'Receptionist Details' },
+      { path: 'addreceptionist', component: ReceptionistFormComponent , title: 'Add Receptionist' },
+        //Invoices
+      { path: 'invoices', component: InvoiceListComponent , title: 'Invoice List' },
+      { path: 'invoices/:id', component: InvoiceFormComponent , title: 'Invoice Details' },
+
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
     ]

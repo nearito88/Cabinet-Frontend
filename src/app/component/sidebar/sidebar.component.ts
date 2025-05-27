@@ -79,14 +79,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'Appointment List',
-          route: '/panel/appointments',
+          route: '/appointments',
           icon: 'fas fa-list',
           isActive: false,
           isExpanded: false
         },
         {
           title: 'New Appointment',
-          route: '/panel/appointments/new',
+          route: '/addappointment',
           icon: 'fas fa-plus',
           isActive: false,
           isExpanded: false
@@ -126,22 +126,16 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'Doctors List',
-          route: '/panel/doctors',
+          route: '/doctor',
           icon: 'fas fa-list',
           isActive: false
         },
         {
           title: 'Add Doctor',
-          route: '/panel/doctors/new',
+          route: '/adddoctor',
           icon: 'fas fa-plus',
           isActive: false
         },
-        {
-          title: 'Schedules',
-          route: '/panel/doctors/schedules',
-          icon: 'fas fa-calendar-alt',
-          isActive: false
-        }
       ]
     },
     {
@@ -153,13 +147,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'Receptionists List',
-          route: '/panel/receptionists',
+          route: '/receptionists',
           icon: 'fas fa-list',
           isActive: false
         },
         {
           title: 'Add Receptionist',
-          route: '/panel/receptionists/new',
+          route: '/addreceptionist',
           icon: 'fas fa-plus',
           isActive: false
         }
@@ -205,24 +199,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
           icon: 'fas fa-plus',
           isActive: false
         },
-        {
-          title: 'Categories',
-          route: '/panel/inventory/categories',
-          icon: 'fas fa-tag',
-          isActive: false
-        },
-        {
-          title: 'Suppliers',
-          route: '/panel/inventory/suppliers',
-          icon: 'fas fa-truck',
-          isActive: false
-        },
-        {
-          title: 'Stock Movement',
-          route: '/panel/inventory/movements',
-          icon: 'fas fa-exchange-alt',
-          isActive: false
-        }
       ]
     },
     {
@@ -234,14 +210,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
       children: [
         {
           title: 'All Invoices',
-          route: '/panel/invoices',
+          route: '/invoices',
           icon: 'fas fa-list',
-          isActive: false
-        },
-        {
-          title: 'Create Invoice',
-          route: '/panel/invoices/new',
-          icon: 'fas fa-plus',
           isActive: false
         },
       ]
