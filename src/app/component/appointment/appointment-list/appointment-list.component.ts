@@ -6,7 +6,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, DatePipe, CurrencyPipe } from '@angular/common';
+import { CommonModule, DatePipe, CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,9 +18,16 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 
-// Import your Appointment model and AppointmentService
+// ⭐ REMOVE MatDialog Imports ⭐
+// import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+
 import { Appointment } from '../../../models/appointment';
-import { appointmentService } from '../../../services/appointment/appointment.service'; // Correct path to your Appointment service
+import { appointmentService } from '../../../services/appointment/appointment.service';
+
+// ⭐ REMOVE Invoice and InvoicePayComponent Imports ⭐
+// import { Invoice } from '../../../models/invoice';
+// import { InvoicePayComponent } from '../../invoice/invoice-pay/invoice-pay.component';
+
 
 @Component({
   selector: 'app-appointment-list',
@@ -44,7 +51,12 @@ import { appointmentService } from '../../../services/appointment/appointment.se
     MatOptionModule,
     MatChipsModule,
     DatePipe,
-    CurrencyPipe
+    CurrencyPipe,
+    TitleCasePipe,
+    // ⭐ REMOVE MatDialogModule from imports ⭐
+    // MatDialogModule,
+    // ⭐ REMOVE InvoicePayComponent from imports ⭐
+    // InvoicePayComponent
   ],
   templateUrl: './appointment-list.component.html',
   styleUrls: ['./appointment-list.component.css']
@@ -76,6 +88,8 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
   private appointmentService = inject(appointmentService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  // ⭐ REMOVE MatDialog Injection ⭐
+  // private dialog = inject(MatDialog);
 
   constructor() {}
 
@@ -89,16 +103,16 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
 
     this.dataSource.filterPredicate = (data: Appointment, filter: string) => {
       const searchStr = (
-        data.patientId +
+        (data.patientId || '') +
         (data.patientName || '') +
         (data.doctorName || '') +
-        data.dateAppointment +
-        data.startTime +
-        data.endTime +
-        data.appointmentStatus +
-        data.paymentStatus +
-        data.totalAmount +
-        data.description
+        (data.dateAppointment ? data.dateAppointment.toString() : '') +
+        (data.startTime || '') +
+        (data.endTime || '') +
+        (data.appointmentStatus || '') +
+        (data.paymentStatus || '') +
+        (data.totalAmount ? data.totalAmount.toString() : '') +
+        (data.description || '')
       ).toLowerCase();
       return searchStr.includes(filter);
     };
@@ -191,27 +205,48 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  viewDetails(appointment: Appointment): void {
-    this.selectedAppointment = appointment;
-    // You can implement a details dialog/modal here
+  getPaymentStatusColor(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'pending':
+        return 'accent';
+      case 'partially_paid':
+        return 'warn';
+      case 'paid':
+        return 'primary';
+      case 'unpaid':
+        return 'accent';
+      case 'partial':
+        return 'warn';
+      case 'cancelled':
+        return 'warn';
+      default:
+        return '';
+    }
   }
 
-  cancelAppointment(appointmentId: number): void {
-    this.appointmentService.deleteappointment(appointmentId.toString()).subscribe({
-      next: () => {
-        this.snackBar.open('Appointment cancelled successfully', 'Close', {
-          duration: 3000,
-          panelClass: ['success-snackbar']
+  viewDetails(appointment: Appointment): void {
+    this.selectedAppointment = appointment;
+  }
+
+  cancelAppointment(appointmentId: string): void {
+    if (confirm('Are you sure you want to cancel this appointment?')) {
+        this.appointmentService.deleteappointment(appointmentId).subscribe({
+            next: () => {
+                this.snackBar.open('Appointment cancelled successfully', 'Close', {
+                    duration: 3000,
+                    panelClass: ['success-snackbar']
+                });
+                this.loadAppointments();
+            },
+            error: (error: any) => {
+                this.snackBar.open('Failed to cancel appointment', 'Close', {
+                    duration: 3000,
+                    panelClass: ['error-snackbar']
+                });
+                console.error('Error cancelling appointment:', error);
+            }
         });
-        this.loadAppointments();
-      },
-      error: (error: any) => {
-        this.snackBar.open('Failed to cancel appointment', 'Close', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
-      }
-    });
+    }
   }
 
   viewAppointmentDetails(appointmentId: string | undefined): void {
@@ -226,18 +261,13 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
     this.router.navigate(['/addappointment']);
   }
 
-  // --- New method for navigating to the Invoice Form ---
-  navigateToInvoiceForm(appointmentId: string | undefined): void {
-    if (appointmentId) {
-      // Assuming your invoice form route is something like '/invoices/create'
-      // And you pass the appointmentId as a query parameter or route parameter.
-      this.router.navigate(['/addinvoice'], { queryParams: { appointmentId: appointmentId } });
-      // Or if you prefer a route parameter:
-      // this.router.navigate(['/invoices', appointmentId, 'create']);
+  // ⭐⭐⭐ MODIFIED METHOD TO NAVIGATE TO PAYMENT PAGE ⭐⭐⭐
+  navigateToPaymentPage(invoiceId: string | undefined): void {
+    if (invoiceId) {
+      this.router.navigate(['/invoices',invoiceId,'pay']); // Navigate to payment page
     } else {
-      this.snackBar.open('Cannot create invoice: Appointment ID is missing.', 'Close', { duration: 3000 });
-      console.warn('Attempted to navigate to invoice form with no appointment ID.');
+      this.snackBar.open('Invoice ID is missing for payment.', 'Close', { duration: 3000 });
+      console.warn('Attempted to navigate to payment page with no invoice ID.');
     }
   }
-  // --- End of New method ---
 }

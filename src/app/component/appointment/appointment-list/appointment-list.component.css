@@ -24,6 +24,16 @@
     --status-cancelled-text: #f44336; /* Red */
     --status-pending-bg: #fffde7; /* Light yellow for pending */
     --status-pending-text: #ffc107; /* Orange/Yellow for pending */
+  
+    /* Payment Status Colors (NEW) */
+    --payment-paid-bg: #e8f5e9; /* Light green */
+    --payment-paid-text: #4caf50; /* Green */
+    --payment-pending-bg: #fff3e0; /* Light orange */
+    --payment-pending-text: #f57c00; /* Orange */
+    --payment-partially-paid-bg: #e8f5e9; /* Light green */
+    --payment-partially-paid-text: #4caf50; /* Green */
+    --payment-cancelled-bg: #ffebee; /* Light red */
+    --payment-cancelled-text: #f44336; /* Red */
   }
   
   
@@ -203,9 +213,7 @@
       padding: 12px 8px;
       border-bottom: 1px solid var(--border-color);
       color: var(--text-color);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      white-space: normal;
       
       vertical-align: middle;
       text-align: center;
@@ -244,27 +252,54 @@
   .status-scheduled {
     background-color: var(--status-scheduled-bg);
     color: var(--status-scheduled-text);
-    border: 1px solid var(--status-scheduled-text);
   }
   
   .status-completed {
     background-color: var(--status-completed-bg);
     color: var(--status-completed-text);
-    border: 1px solid var(--status-completed-text);
   }
   
   .status-cancelled {
     background-color: var(--status-cancelled-bg);
     color: var(--status-cancelled-text);
-    border: 1px solid var(--status-cancelled-text);
   }
   
   .status-pending { /* New status style */
     background-color: var(--status-pending-bg);
     color: var(--status-pending-text);
-    border: 1px solid var(--status-pending-text);
   }
   
+  /* Payment Status Styling */
+  .payment-status-text {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.85em;
+    text-align: center;
+    min-width: 80px; /* Give a consistent width for badges */
+    line-height: 1.2;
+  }
+  
+  .payment-paid {
+    background-color: var(--payment-paid-bg);
+    color: var(--payment-paid-text);
+  }
+  
+  .payment-pending {
+    background-color: var(--payment-pending-bg);
+    color: var(--payment-pending-text);
+  }
+  
+  .payment-partially-paid {
+    background-color: var(--payment-partially-paid-bg);
+    color: var(--payment-partially-paid-text);
+  }
+  
+  .payment-cancelled {
+    background-color: var(--payment-cancelled-bg);
+    color: var(--payment-cancelled-text);
+  }
   
   /* Actions Cell Styling */
   .actions-cell {
@@ -352,6 +387,23 @@
       min-width: 150px; /* Description might still need more */
   }
   
+  .mat-column-appointmentStatus {
+      width: 120px;
+      min-width: 100px;
+      text-align: center;
+  }
+  .mat-column-paymentStatus {
+      width: 120px;
+      min-width: 100px;
+      text-align: center;
+      padding: 0 10px;
+  }
+  .mat-column-totalAmount {
+      width: 70px;
+      min-width: 60px;
+      text-align: right;
+  }
+  
   /* Responsive adjustments */
   @media (max-width: 900px) {
       .main-container {
@@ -406,8 +458,8 @@
       text-align: center;
   }
   .mat-column-paymentStatus {
-      width: 70px;
-      min-width: 60px;
+      width: 120px;
+      min-width: 100px;
       text-align: center;
   }
   .mat-column-totalAmount {

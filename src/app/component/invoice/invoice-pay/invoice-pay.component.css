@@ -1,191 +1,272 @@
-/* Reusing variables from your product-add.component.css for consistency */
+/* Custom CSS Variables (ensure these are consistent with your global theme) */
 :root {
-    --primary-color: #3f51b5;
-    --secondary-color: #5c6bc0;
-    --warn-color: #f44336;
-    --text-muted-color: #757575;
-    --icon-color: #424242;
-    --border-color: #e0e0e0;
-    --card-background-color: #ffffff;
-    --background-color: #f5f5f5;
-    --danger-color: #f44336;
+  /* Core Material Palettes - often defined globally in styles.scss */
+  --primary-color: #3f51b5; /* Deeper blue (keep for other elements) */
+  --secondary-color: #5c6bc0;
+  --warn-color: #f44336;
+  --text-primary-color: #333333;
+  --text-muted-color: #757575;
+  --icon-color: #424242;
+  --border-color: #e0e0e0;
+  --card-background-color: #ffffff;
+  --background-color: #f5f5f5;
+  --info-background-color: #e3f2fd;
+  --info-border-color: #90caf9;
+
+  /* ⭐ Specific Colors for Invoice Status Chips ⭐ */
+  --chip-paid-bg: #4CAF50; /* Green */
+  --chip-paid-text: #FFFFFF;
+
+  --chip-pending-bg: #FFC107; /* Yellow/Amber */
+  --chip-pending-text: #333333; /* Dark text for contrast */
+
+  --chip-partially-paid-bg: #00BCD4; /* Light Blue/Cyan for Partially Paid */
+  --chip-partially-paid-text: #FFFFFF; /* White text for contrast */
+
+  --chip-cancelled-bg: #F44336; /* Red */
+  --chip-cancelled-text: #FFFFFF;
+}
+
+
+/* Base card styling for the whole component */
+.invoice-pay-card {
+  max-width: 650px; /* Slightly wider to accommodate content better */
+  margin: 40px auto; /* More margin from top/bottom */
+  padding: 30px; /* Increased padding inside card */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* More pronounced shadow */
+  border-radius: 16px; /* More rounded corners */
+  background-color: var(--card-background-color, #ffffff);
+  position: relative; /* For loading overlay */
+  overflow: hidden; /* Ensures content doesn't spill out with shadows/borders */
+}
+
+/* Header Styling */
+.invoice-pay-card mat-card-header {
+  margin-bottom: 30px; /* More space below header */
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  padding-bottom: 20px; /* Increased padding below header border */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left; /* Align header text to left */
+}
+
+.invoice-pay-card mat-card-title {
+  font-size: 2.2em; /* Larger title font */
+  font-weight: 700;
+  color: var(--primary-color, #3f51b5);
+  margin-bottom: 8px; /* Space between title and subtitle */
+  line-height: 1.2; /* Better line height */
+}
+
+.invoice-pay-card mat-card-subtitle {
+  color: var(--text-muted-color, #757575);
+  font-size: 1em; /* Slightly larger subtitle */
+}
+
+/* Invoice Summary Section */
+.invoice-summary {
+  background-color: var(--info-background-color, #e3f2fd);
+  border: 1px solid var(--info-border-color, #90caf9);
+  border-radius: 10px;
+  padding: 20px;
+  margin-bottom: 30px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.invoice-summary p {
+  margin: 0;
+  font-size: 1em;
+  color: var(--text-primary-color, #333333);
+  display: flex;
+  flex-direction: column;
+}
+
+.invoice-summary strong {
+  font-size: 0.85em; /* Keep label slightly smaller */
+  color: var(--text-muted-color, #757575);
+  margin-bottom: 4px;
+  font-weight: 600; /* Keep label bold */
+}
+
+.invoice-summary span {
+  font-size: 1.2em;
+  font-weight: 700;
+  color: var(--text-primary-color, #333333);
+}
+
+mat-chip-listbox {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+mat-chip {
+  height: 30px;
+  padding: 0 15px;
+  font-size: 0.9em;
+  font-weight: 500;
+  line-height: 30px;
+  border-radius: 18px;
+  transition: background-color 0.2s ease;
+  min-width: 90px;
+  text-align: center;
+  justify-content: center;
+}
+
+/* Custom colors for chips based on status (ensure these match your theme) */
+/* ⭐ Mapping Custom Colors to mat-chip[color] attributes ⭐ */
+mat-chip[color="paid"] { /* New custom color name for "paid" */
+  background-color: var(--chip-paid-bg, #4CAF50);
+  color: var(--chip-paid-text, #FFFFFF);
+}
+
+mat-chip[color="pending"] { /* New custom color name for "pending" */
+  background-color: var(--chip-pending-bg, #FFC107);
+  color: var(--chip-pending-text, #333333);
+}
+
+mat-chip[color="partially-paid"] { /* New custom color name for "partially-paid" */
+  background-color: var(--chip-partially-paid-bg, #00BCD4);
+  color: var(--chip-partially-paid-text, #FFFFFF);
+}
+
+mat-chip[color="cancelled"] { /* New custom color name for "cancelled" */
+  background-color: var(--chip-cancelled-bg, #F44336);
+  color: var(--chip-cancelled-text, #FFFFFF);
+}
+
+/* Fallback for general Material colors if still used elsewhere or for general theme */
+mat-chip[color="primary"] { /* Ensure this exists if your general theme uses it */
+  background-color: var(--primary-color, #3f51b5);
+  color: #fff;
+}
+
+/* Info Section Header */
+.info-section h3 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px; /* More space below header */
+  color: var(--secondary-color, #5c6bc0);
+  font-size: 1.3em; /* Larger font */
+  font-weight: 600;
+  border-bottom: 1px dashed var(--border-color, #e0e0e0); /* Dotted line separator */
+  padding-bottom: 10px;
+}
+
+.info-section h3 mat-icon {
+  margin-right: 12px; /* More space next to icon */
+  color: var(--icon-color, #424242);
+  font-size: 1.5em; /* Larger icon */
+}
+
+/* Form Grid Layout */
+.payment-form-grid {
+  display: grid;
+  grid-template-columns: 1fr; /* Default to single column */
+  gap: 25px; /* Increased space between form fields */
+}
+
+@media (min-width: 600px) {
+  .payment-form-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Two columns on wider screens */
   }
-  
-  .invoice-pay-card {
-    max-width: 600px; /* Slightly narrower than add product for payment forms */
-    margin: 30px auto;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
-    background-color: var(--card-background-color, #ffffff);
-    position: relative; /* For loading overlay */
-  }
-  
-  .invoice-pay-card mat-card-header {
-    margin-bottom: 25px;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
-    padding-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .invoice-pay-card mat-card-title {
-    font-size: 1.6em; /* Slightly smaller for payment form */
-    font-weight: 700;
-    color: var(--primary-color, #3f51b5);
-    margin-bottom: 5px;
-  }
-  
-  .invoice-pay-card mat-card-subtitle {
-    color: var(--text-muted-color, #757575);
-    font-size: 0.9em;
-  }
-  
-  .invoice-summary {
-    background-color: #f0f4f8; /* Light blue background */
-    border: 1px solid #d0dbe6;
-    border-radius: 8px;
-    padding: 15px;
-    margin-bottom: 25px;
-  }
-  
-  .invoice-summary p {
-    margin: 5px 0;
-    font-size: 0.95em;
-    color: #333;
-  }
-  
-  .invoice-summary strong {
-    color: #000;
-  }
-  
-  mat-chip-listbox {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 8px; /* Space from "Status:" text */
-  }
-  
-  mat-chip {
-    height: 25px;
-    padding: 0 10px;
-    font-size: 0.8em;
-    font-weight: 500;
-    line-height: 25px;
-    border-radius: 12px;
-    transition: background-color 0.2s ease;
-  }
-  
-  /* Custom colors for chips if not provided by Angular Material themes */
-  mat-chip[color="primary"] {
-    background-color: var(--primary-color, #3f51b5);
-    color: #fff;
-  }
-  
-  mat-chip[color="warn"] {
-    background-color: var(--warn-color, #f44336);
-    color: #fff;
-  }
-  
-  
-  .info-section h3 {
-    display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    color: var(--secondary-color, #5c6bc0);
-    font-size: 1.1em; /* Slightly smaller */
-    font-weight: 600;
-  }
-  
-  .info-section h3 mat-icon {
-    margin-right: 10px;
-    color: var(--icon-color, #424242);
-  }
-  
-  .form-group {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 15px;
-  }
-  
-  @media (min-width: 600px) {
-    .form-group {
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    }
-  }
-  
-  mat-form-field {
-    width: 100%;
-  }
-  
-  mat-card-actions {
-    padding: 20px 0 0;
-    border-top: 1px solid var(--border-color, #e0e0e0);
-    margin-top: 25px;
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .button-container {
-    display: flex;
-    gap: 15px;
-  }
-  
-  .button-container button {
-    padding: 10px 20px; /* Slightly less padding */
-    font-size: 15px; /* Slightly smaller font */
-    border-radius: 8px;
-  }
-  
-  .loading-container, .error-message {
-    text-align: center;
-    margin: 20px auto; /* Adjust margin for modals/smaller spaces */
-    padding: 15px; /* Adjust padding */
-    border-radius: 8px; /* Slightly smaller radius */
-    max-width: 400px; /* Adjust max width */
-    background-color: var(--background-color, #f5f5f5);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
-  }
-  
-  .loading-container mat-spinner {
-    margin: 0 auto 10px auto;
-  }
-  
-  .error-message {
-    color: var(--danger-color, #f44336);
-    border: 1px solid var(--danger-color, #f44336);
-  }
-  
-  .error-message mat-icon {
-    color: var(--danger-color, #f44336);
-    margin-right: 8px;
-  }
-  
-  mat-error {
-    font-size: 0.7em; /* Slightly smaller error font */
-    color: var(--danger-color, #f44336);
-    margin-top: 2px; /* Less top margin */
-  }
-  
-  .mat-form-field-wrapper {
-    padding-bottom: 0.3em; /* Less padding */
-  }
-  
-  .mat-form-field-subscript-wrapper {
-    margin-top: 0;
-  }
-  
-  .loading-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.8);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 10; /* Ensure it's above other content */
-    border-radius: 12px; /* Match card border-radius */
-  }
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+/* Action Buttons Section */
+mat-card-actions {
+  padding: 30px 0 0; /* Increased top padding */
+  border-top: 1px solid var(--border-color, #e0e0e0);
+  margin-top: 30px; /* More space above actions */
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 20px; /* Space between buttons */
+}
+
+.button-container {
+  display: flex;
+  gap: 15px; /* Space between buttons */
+}
+
+.button-container button {
+  padding: 12px 30px; /* Larger buttons */
+  font-size: 17px; /* Larger font */
+  border-radius: 8px; /* Rounded corners */
+  min-width: 120px; /* Ensure minimum width for buttons */
+}
+
+/* Loading and Error Overlays */
+.loading-container, .error-message {
+  text-align: center;
+  margin: 30px auto;
+  padding: 25px; /* Increased padding */
+  border-radius: 12px; /* More rounded */
+  max-width: 450px; /* Wider */
+  background-color: var(--background-color, #f5f5f5);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Softer shadow */
+}
+
+.loading-container mat-spinner {
+  margin: 0 auto 20px auto; /* More space below spinner */
+}
+
+.error-message {
+  color: var(--warn-color, #f44336);
+  border: 1px solid var(--warn-color, #f44336);
+  background-color: #ffebee; /* Light red background for errors */
+  display: flex; /* Align icon and text */
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.error-message mat-icon {
+  color: var(--warn-color, #f44336);
+  margin-right: 15px; /* More space next to icon */
+  font-size: 1.5em; /* Larger icon */
+}
+
+/* Specific styling for validation error messages under form fields */
+mat-error {
+  font-size: 0.8em; /* Slightly larger error font */
+  color: var(--warn-color, #f44336);
+  margin-top: 6px; /* More top margin */
+  font-weight: 500;
+}
+
+/* Adjust wrapper padding for Material input fields to ensure correct alignment */
+.mat-form-field-wrapper {
+  padding-bottom: 0.75em; /* Adjust to ensure error messages fit */
+}
+
+.mat-form-field-subscript-wrapper {
+  margin-top: 0;
+}
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.85); /* Slightly less transparent */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  border-radius: 16px; /* Match card border-radius */
+}
+
+.loading-overlay p {
+  color: var(--text-primary-color, #333333);
+  font-size: 1.1em;
+  margin-top: 15px;
+}

@@ -10,7 +10,9 @@ export interface Appointment {
     paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'CANCELLED';
     description: string;   // Matches backend's Description (new naming, replaces 'reason')
     totalAmount: number;   // Matches backend's TotalAmount (new)
-    isRelated: boolean;    // Matches backend's isRelated (new)  
+    isRelated: boolean;    // Matches backend's isRelated (new) 
+    invoiceId?: string; // This will hold the invoiceId from the backend
+
     // These are typically derived or fetched separately on the frontend,
     // but if your backend DTO includes them, keep them.
     // For now, let's keep them as optional for easier display,

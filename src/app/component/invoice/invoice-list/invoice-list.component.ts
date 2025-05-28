@@ -1,4 +1,3 @@
-// src/app/invoice-list/invoice-list.component.ts
 import { Component, OnInit, ViewChild, inject, AfterViewInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -18,9 +17,11 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+// ⭐ REMOVE MatDialog Imports ⭐
+// import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
-import { InvoicePayComponent } from '../invoice-pay/invoice-pay.component';
+// ⭐ REMOVE InvoicePayComponent Import (not used directly in this component anymore) ⭐
+// import { InvoicePayComponent } from '../invoice-pay/invoice-pay.component';
 
 import { Invoice } from '../../../models/invoice'; // <--- Using your provided frontend Invoice interface
 import { invoiceService } from '../../../services/invoice/invoice.service';
@@ -49,13 +50,14 @@ import { invoiceService } from '../../../services/invoice/invoice.service';
     MatChipsModule,
     DatePipe,
     CurrencyPipe,
-    MatDialogModule,
+    // ⭐ REMOVE MatDialogModule from imports ⭐
+    // MatDialogModule,
   ],
   templateUrl: './invoice-list.component.html',
   styleUrls: ['./invoice-list.component.css']
 })
 export class InvoiceListComponent implements OnInit, AfterViewInit {
-  invoices: Invoice[] = []; // <--- Use frontend Invoice model
+  invoices: Invoice[] = [];
   errorMessage: string = '';
   isLoading = false;
   selectedStatus: string = '';
@@ -70,7 +72,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     'datePaid',
     'actions'
   ];
-  dataSource = new MatTableDataSource<Invoice>(); // <--- Use frontend Invoice model
+  dataSource = new MatTableDataSource<Invoice>();
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -78,7 +80,8 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
   private invoiceService = inject(invoiceService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
-  private dialog = inject(MatDialog);
+  // ⭐ REMOVE MatDialog Injection ⭐
+  // private dialog = inject(MatDialog); // No longer needed as dialogs are removed
 
   constructor() {}
 
@@ -90,16 +93,16 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    this.dataSource.filterPredicate = (data: Invoice, filter: string) => { // <--- Use frontend Invoice model
+    this.dataSource.filterPredicate = (data: Invoice, filter: string) => {
       const searchStr = (
-        (data.patientName || '') + // Ensure it's not null/undefined
+        (data.patientName || '') +
         data.appointmentId +
         data.invoiceDate +
         data.totalAmount +
         data.paidAmount +
         data.invoiceStatus +
         (data.paymentType || '') +
-        (data.datePaid || '') // datePaid can be empty string, ensure it's handled
+        (data.datePaid || '')
       ).toLowerCase();
       return searchStr.includes(filter);
     };
@@ -109,7 +112,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.errorMessage = '';
     this.invoiceService.getAllInvoices().subscribe({
-      next: (invoices: Invoice[]) => { // <--- Use frontend Invoice model
+      next: (invoices: Invoice[]) => {
         console.log('DEBUG: Invoices loaded from backend:', invoices);
         this.invoices = invoices;
         this.dataSource.data = invoices;
@@ -140,46 +143,28 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
 
   getStatusColor(status: Invoice['invoiceStatus']): string {
     switch (status) {
-      case 'PENDING':
+      case 'Pending':
         return 'accent';
-      case 'PAID':
+      case 'Paid':
         return 'primary';
-      case 'PARTIALLY_PAID':
+      case 'Partially Paid':
         return 'warn';
-      case 'CANCELLED':
+      case 'Cancelled':
         return 'warn';
-      // If 'PARTIALLY_PAID' can exist, but your model doesn't define it in invoiceStatus,
-      // you might need to adjust your Invoice interface or how you display it.
-      // For now, it will fall through to default if it appears.
       default:
         console.warn(`Unknown invoice status: ${status}. Defaulting to no color.`);
-
         return '';
     }
   }
 
+  // ⭐ MODIFIED: processPayment now navigates to a new page ⭐
   processPayment(invoiceId: string | undefined): void {
     if (invoiceId) {
-      const dialogRef = this.dialog.open(InvoicePayComponent, {
-        width: '650px',
-        data: { invoiceId: invoiceId }
-      });
-
-      dialogRef.componentInstance.paymentProcessed.subscribe((updatedInvoice: Invoice) => { // <--- Use frontend Invoice model
-        const index = this.dataSource.data.findIndex(inv => inv.invoiceId === updatedInvoice.invoiceId);
-        if (index > -1) {
-          this.dataSource.data[index] = updatedInvoice;
-          this.dataSource._updateChangeSubscription();
-          this.snackBar.open('Invoice ' + updatedInvoice.invoiceId + ' payment status updated.', 'Close', { duration: 3000 });
-        }
-      });
-
-      dialogRef.afterClosed().subscribe(() => {
-        this.loadInvoices(); // Re-fetch to ensure consistency and correct status mapping if any edge cases arise
-      });
-
+      // Navigate to the payment page, passing the invoiceId as a route parameter
+      this.router.navigate(['/invoices', 'pay', invoiceId]);
     } else {
       this.snackBar.open('Invoice ID is missing to process payment.', 'Close', { duration: 3000 });
+      console.warn('Attempted to navigate to payment page with no invoice ID.');
     }
   }
 
@@ -210,7 +195,7 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
 
   editInvoice(invoiceId: string | undefined): void {
     if (invoiceId) {
-      this.router.navigate(['/invoices', invoiceId, 'edit']);
+      this.router.navigate(['/invoices', invoiceId]);
     } else {
       this.snackBar.open('Invoice ID is missing for editing.', 'Close', { duration: 3000 });
     }

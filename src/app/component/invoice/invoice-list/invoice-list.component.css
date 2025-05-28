@@ -1,5 +1,20 @@
 /* src/app/invoice-list/invoice-list.component.css */
 
+/* Invoice Status Colors */
+:root {
+    --invoice-status-paid-bg: #e8f5e9; /* Light green */
+    --invoice-status-paid-text: #4caf50; /* Green */
+    
+    --invoice-status-partially-paid-bg: #e3f2fd; /* Light blue */
+    --invoice-status-partially-paid-text: #2196f3; /* Blue */
+    
+    --invoice-status-pending-bg: #fff3e0; /* Light yellow */
+    --invoice-status-pending-text: #f57c00; /* Orange */
+    
+    --invoice-status-cancelled-bg: #ffebee; /* Light red */
+    --invoice-status-cancelled-text: #f44336; /* Red */
+}
+
 .invoice-list-container {
     padding: 20px;
     max-width: 1400px; /* Adjusted max-width for more columns */
@@ -178,7 +193,41 @@
   .mat-column-invoiceDate { width: 100px; }
   .mat-column-totalAmount { width: 100px; text-align: right; }
   .mat-column-paidAmount { width: 100px; text-align: right; }
-  .mat-column-invoiceStatus { width: 100px; }
+  .mat-column-invoiceStatus { 
+    width: 100px; 
+    text-align: center;
+  }
+
+  .invoice-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 0.85em;
+    text-align: center;
+    min-width: 80px;
+    line-height: 1.2;
+  }
+
+  .invoice-status-paid {
+    background-color: var(--invoice-status-paid-bg);
+    color: var(--invoice-status-paid-text);
+  }
+
+  .invoice-status-partially-paid {
+    background-color: var(--invoice-status-partially-paid-bg);
+    color: var(--invoice-status-partially-paid-text);
+  }
+
+  .invoice-status-pending {
+    background-color: var(--invoice-status-pending-bg);
+    color: var(--invoice-status-pending-text);
+  }
+
+  .invoice-status-cancelled {
+    background-color: var(--invoice-status-cancelled-bg);
+    color: var(--invoice-status-cancelled-text);
+  }
   .mat-column-paymentType { width: 100px; }
   .mat-column-datePaid { width: 100px; }
   

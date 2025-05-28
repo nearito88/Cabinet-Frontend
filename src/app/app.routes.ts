@@ -24,6 +24,7 @@ import { ReceptionistDetailsComponent } from './component/receptionist/reception
 import { ReceptionistFormComponent } from './component/receptionist/receptionist-form/receptionist-form.component';
 import { InvoiceListComponent } from './component/invoice/invoice-list/invoice-list.component';
 import { InvoiceFormComponent } from './component/invoice/invoice-form/invoice-form.component';
+import { InvoicePayComponent } from './component/invoice/invoice-pay/invoice-pay.component';
 // Public routes (no authentication required)
 export const publicRoutes: Routes = [
   { 
@@ -78,7 +79,7 @@ export const protectedRoutes: Routes = [
         //Invoices
       { path: 'invoices', component: InvoiceListComponent , title: 'Invoice List' },
       { path: 'invoices/:id', component: InvoiceFormComponent , title: 'Invoice Details' },
-
+      { path: 'invoices/:id/pay', component: InvoicePayComponent , title: 'Invoice Payment' },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
     ]

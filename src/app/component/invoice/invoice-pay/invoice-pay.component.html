@@ -23,7 +23,7 @@
           <p><strong>Remaining Amount:</strong> {{ calculateRemainingAmount() | currency:'MAD':'symbol':'1.2-2' }}</p>
           <p><strong>Status:</strong>
             <mat-chip-listbox>
-              <mat-chip [color]="invoice.invoiceStatus === 'PAID' ? 'primary' : 'warn'" selected>
+              <mat-chip [color]="invoice.invoiceStatus === 'Paid' ? 'primary' : 'warn'" selected>
                 {{ invoice.invoiceStatus }}
               </mat-chip>
             </mat-chip-listbox>
@@ -66,10 +66,10 @@
       </div>
     </mat-card-content>
   
-    <mat-card-actions>
+    <mat-card-actions *ngIf="paymentForm">
       <div class="button-container">
         <button mat-raised-button color="primary" (click)="processPayment()"
-        [disabled]="paymentForm.invalid || isLoading || invoice.invoiceStatus === 'PAID'">
+                [disabled]="paymentForm.invalid || isLoading || invoice.invoiceStatus === 'Paid'">
           <mat-icon>check_circle_outline</mat-icon> Process Payment
         </button>
         <button mat-button (click)="cancel()">

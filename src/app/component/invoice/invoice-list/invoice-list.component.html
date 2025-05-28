@@ -65,11 +65,9 @@
           <ng-container matColumnDef="invoiceStatus">
             <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
             <td mat-cell *matCellDef="let invoice">
-              <mat-chip-listbox>
-                <mat-chip [color]="getStatusColor(invoice.invoiceStatus)" selected>
+              <span class="invoice-status invoice-status-{{invoice.invoiceStatus.toLowerCase()}}">
                   {{ invoice.invoiceStatus }}
-                </mat-chip>
-              </mat-chip-listbox>
+              </span>
             </td>
           </ng-container>
   
