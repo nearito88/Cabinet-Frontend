@@ -25,6 +25,7 @@ import { ReceptionistFormComponent } from './component/receptionist/receptionist
 import { InvoiceListComponent } from './component/invoice/invoice-list/invoice-list.component';
 import { InvoiceFormComponent } from './component/invoice/invoice-form/invoice-form.component';
 import { InvoicePayComponent } from './component/invoice/invoice-pay/invoice-pay.component';
+import { AppointmentInvoiceListComponent } from './component/invoice/appointment-invoice-list/appointment-invoice-list.component';
 // Public routes (no authentication required)
 export const publicRoutes: Routes = [
   { 
@@ -79,7 +80,10 @@ export const protectedRoutes: Routes = [
         //Invoices
       { path: 'invoices', component: InvoiceListComponent , title: 'Invoice List' },
       { path: 'invoices/:id', component: InvoiceFormComponent , title: 'Invoice Details' },
-      { path: 'invoices/:id/pay', component: InvoicePayComponent , title: 'Invoice Payment' },
+      { path: 'appointments/:appointmentId/pay', component: InvoicePayComponent , title: 'Invoice Payment' },
+
+      { path: 'appointments/:appointmentId/invoices', component: AppointmentInvoiceListComponent , title: 'Invoices' },
+
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
 
     ]

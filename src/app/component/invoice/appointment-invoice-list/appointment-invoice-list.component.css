@@ -1,0 +1,58 @@
+.invoice-list-container {
+    padding: 24px;
+    max-width: 1000px;
+    margin: auto;
+  }
+  
+  .invoice-card {
+    margin-bottom: 16px;
+    border-left: 5px solid #3f51b5;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .invoice-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .invoice-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .invoice-status {
+    font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-transform: uppercase;
+  }
+  
+  .invoice-status.PENDING {
+    color: #ff9800;
+    background-color: #fff3e0;
+  }
+  
+  .invoice-status.PAID {
+    color: #4caf50;
+    background-color: #e8f5e9;
+  }
+  
+  .invoice-status.PARTIALLY_PAID {
+    color: #2196f3;
+    background-color: #e3f2fd;
+  }
+  
+  .invoice-details {
+    margin-top: 8px;
+    font-size: 14px;
+  }
+  
+  .invoice-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  

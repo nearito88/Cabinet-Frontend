@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Appointment } from '../../models/appointment';
+import { Invoice } from '../../models/invoice';
 
 @Injectable({
   providedIn: 'root'
@@ -36,12 +37,23 @@ export class appointmentService {
     return this.http.get<Appointment[]>(`${this.apiUrl}/patient/${patientId}`);
   }
 
+  getInvoicesByAppointmentId(appointmentId: string): Observable<Invoice[]> {
+    return this.http.get<Invoice[]>(`${this.apiUrl}/${appointmentId}/invoices`);
+  }
+
   markAppointmentAsPaid(appointmentId: string): Observable<Appointment> {
     const payload = { paymentStatus: 'Paid' };
     // Angular's HttpClient will automatically set Content-Type: application/json
     // because you're sending a JSON object (`payload`).
     // We expect a JSON object (`Appointment`) back, so no `responseType` is needed.
     return this.http.put<Appointment>(`${this.apiUrl}/${appointmentId}/mark-paid`, payload);  
+  }
+
+  generateInvoiceForAppointment(appointmentId: string, usedProducts: {productId: string, quantity: number}[]): Observable<Invoice> {
+    return this.http.post<Invoice>(
+      `${this.apiUrl}/appointments/${appointmentId}/generate-invoice`,
+      { usedProducts } // Envoie la liste dans le body JSON
+    );
   }
 
 }

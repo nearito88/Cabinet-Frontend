@@ -77,6 +77,7 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
     'appointmentStatus',
     'paymentStatus',
     'totalAmount',
+    'paidAmount',
     'description',
     'actions'
   ];
@@ -139,6 +140,28 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
         this.snackBar.open(this.errorMessage, 'Close', { duration: 5000 });
       }
     });
+  }
+
+  getServicesAsString(appointment: Appointment): string {
+    if (!appointment.services || appointment.services.length === 0) {
+      return 'No services'; // Return plain text for no services
+    }
+
+    // Limit to, for example, 2 services (you can adjust this number)
+    const servicesToDisplay = appointment.services.slice(0, 2);
+
+    const serviceListItems = servicesToDisplay
+      .map(s => `<li>${s.serviceName}</li>`) // Assume serviceName exists
+      .join(''); // Join without a comma
+
+    let htmlString = `<ul>${serviceListItems}</ul>`;
+
+    // If there are more services than displayed, add an ellipsis
+    if (appointment.services.length > 2) {
+      htmlString += `<ul><li>...</li></ul>`; // Add an ellipsis as a separate list item
+    }
+
+    return htmlString;
   }
 
   editAppointment(appointmentId: string | undefined): void {
@@ -249,25 +272,20 @@ export class AppointmentListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  viewAppointmentDetails(appointmentId: string | undefined): void {
-    if (appointmentId) {
-      this.router.navigate(['/appointments', appointmentId]);
-    } else {
-      this.snackBar.open('Appointment ID is missing for viewing details!', 'Close', { duration: 3000 });
-    }
+  goToInvoices(appointmentId: string): void {
+    this.router.navigate(['/appointments', appointmentId, 'invoices']);
   }
 
   navigateToAppointmentForm(): void {
     this.router.navigate(['/addappointment']);
   }
 
-  // ⭐⭐⭐ MODIFIED METHOD TO NAVIGATE TO PAYMENT PAGE ⭐⭐⭐
-  navigateToPaymentPage(invoiceId: string | undefined): void {
-    if (invoiceId) {
-      this.router.navigate(['/invoices',invoiceId,'pay']); // Navigate to payment page
+  navigateToPaymentPage(appointmentId: string | undefined): void {
+    if (appointmentId) {
+      this.router.navigate(['/appointments', appointmentId, 'pay']);
     } else {
-      this.snackBar.open('Invoice ID is missing for payment.', 'Close', { duration: 3000 });
-      console.warn('Attempted to navigate to payment page with no invoice ID.');
+      this.snackBar.open('Missing appointment ID for payment.', 'Close', { duration: 3000 });
     }
   }
+  
 }

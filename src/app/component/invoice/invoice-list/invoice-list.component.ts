@@ -65,11 +65,9 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
     'appointmentId',
     'patient',
     'invoiceDate',
-    'totalAmount',
     'paidAmount',
     'invoiceStatus',
     'paymentType',
-    'datePaid',
     'actions'
   ];
   dataSource = new MatTableDataSource<Invoice>();
@@ -98,11 +96,9 @@ export class InvoiceListComponent implements OnInit, AfterViewInit {
         (data.patientName || '') +
         data.appointmentId +
         data.invoiceDate +
-        data.totalAmount +
         data.paidAmount +
         data.invoiceStatus +
-        (data.paymentType || '') +
-        (data.datePaid || '')
+        (data.paymentType || '')
       ).toLowerCase();
       return searchStr.includes(filter);
     };

@@ -1,0 +1,192 @@
+/* src/app/invoice-form/invoice-form.component.css */
+
+.invoice-form-card {
+    max-width: 800px; /* Limit max width for readability */
+    margin: 20px auto; /* Center the card */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  mat-card-header {
+    padding-bottom: 15px; /* Space below header */
+    border-bottom: 1px solid #eee; /* Separator line */
+    margin-bottom: 20px;
+  }
+  
+  mat-card-title {
+    font-size: 1.8em;
+    font-weight: 500;
+    color: #3f51b5; /* Primary color from Angular Material */
+  }
+  
+  mat-card-subtitle {
+    color: #777;
+  }
+  
+  /* --- Loading and Error Styles --- */
+  .loading-container,
+  .error-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .error-message mat-icon {
+    color: #f44336; /* Red error color */
+    margin-bottom: 10px;
+    font-size: 48px;
+  }
+  
+  /* --- Form Sections --- */
+  .form-section {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 25px; /* Space between sections */
+  }
+  
+  .form-section h3 {
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #3f51b5; /* Primary color */
+    font-size: 1.2em;
+  }
+  
+  .form-section h3 mat-icon {
+    margin-right: 8px;
+    color: #3f51b5;
+  }
+  
+  /* Grid layout for form fields within sections */
+  form {
+    display: flex;
+    flex-direction: column; /* Stack sections vertically */
+  }
+  
+  .form-section > .mat-form-field {
+    width: 100%; /* Make form fields take full width within their container */
+    margin-bottom: 10px; /* Space between form fields */
+  }
+  
+  /* Flexbox for fields in rows if desired, e.g., two columns */
+  /* .form-fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+  } */
+  
+  
+  /* --- Product Selection Section --- */
+  .add-product-controls {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 10px; /* Space between items */
+    align-items: flex-end; /* Align items to the bottom */
+    margin-bottom: 15px;
+  }
+  
+  .product-select-field {
+    flex-grow: 2; /* Allow select to take more space */
+    min-width: 180px; /* Ensure it doesn't get too small */
+  }
+  
+  .quantity-field {
+    flex-grow: 1; /* Allow quantity input to take some space */
+    max-width: 100px; /* Limit width */
+  }
+  
+  .stock-info {
+    margin-bottom: 10px; /* Space below stock info */
+    font-size: 0.85em;
+    color: #555;
+    white-space: nowrap; /* Prevent wrapping stock info */
+  }
+  
+  .stock-info strong {
+    color: #3f51b5; /* Highlight available quantity */
+    font-weight: 600;
+  }
+  
+  .add-product-controls button {
+    margin-bottom: 10px; /* Align button baseline with input fields */
+  }
+  
+  /* --- Selected Products List (Chips) --- */
+  .selected-products-list {
+    margin-top: 15px;
+    padding: 10px;
+    border: 1px dashed #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+  }
+  
+  .selected-products-list h4 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #555;
+    font-size: 1em;
+    font-weight: normal;
+  }
+  
+  mat-chip-listbox {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  
+  mat-chip-row {
+    background-color: #e8eaf6; /* Light blue background for chips */
+    color: #3f51b5; /* Primary text color for chips */
+    border-radius: 16px;
+    padding: 6px 12px;
+    font-size: 0.9em;
+  }
+  
+  mat-chip-row button {
+    margin-left: 5px;
+    color: #f44336; /* Red for remove icon */
+    font-size: 18px; /* Adjust icon size */
+  }
+  
+  .no-products-message {
+    color: #777;
+    font-style: italic;
+    padding: 10px 0;
+    text-align: center;
+  }
+  
+  /* --- Form Actions (Buttons) --- */
+  .form-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Space between buttons */
+    padding-top: 20px;
+    border-top: 1px solid #eee; /* Separator line */
+    margin-top: 20px;
+  }
+  
+  /* --- Responsive Adjustments --- */
+  @media (max-width: 600px) {
+    .invoice-form-card {
+      margin: 10px;
+      padding: 15px;
+    }
+  
+    .add-product-controls {
+      flex-direction: column; /* Stack product controls vertically */
+      align-items: stretch; /* Stretch items to full width */
+    }
+  
+    .product-select-field,
+    .quantity-field,
+    .stock-info,
+    .add-product-controls button {
+      width: 100%; /* Full width for stacked items */
+      max-width: none; /* Remove max-width constraint */
+    }
+  }

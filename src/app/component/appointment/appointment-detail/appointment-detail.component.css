@@ -1,39 +1,264 @@
-/* src/app/appointment-detail/appointment-detail.component.css */
-
-/* Reuse the general styles from your application's root or a shared stylesheet */
+/* Harmonized style with appointment form */
 :host {
-    --primary-color: #3f51b5;
+    --primary-color: #007bff;
     --secondary-color: #6c757d;
-    --success-color: #28a745;
     --info-color: #17a2b8;
     --dark-color: #343a40;
     --light-color: #f8f9fa;
-    --background-color: #f0f2f5;
-    --card-background: #ffffff;
+    --background-color: #ffffff;
+    --section-bg: #f8f9fa;
     --border-color: #e9ecef;
     --danger-color: #dc3545;
-    --hover-color: #f5f5f5;
-    --text-color: #333;
-
-    /* Status Colors */
-    --status-scheduled-bg: #e3f2fd;
-    --status-scheduled-text: #2196f3;
-    --status-completed-bg: #e8f5e9;
-    --status-completed-text: #4caf50;
-    --status-cancelled-bg: #ffebee;
-    --status-cancelled-text: #f44336;
-    --status-pending-bg: #fffde7;
-    --status-pending-text: #ffc107;
+    --success-color: #28a745;
 }
 
-.appointment-form-container { /* Renamed from original for better semantic */
-    padding: 20px;
-    background-color: var(--background-color);
-    min-height: calc(100vh - 64px);
+.appointment-form-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: flex-start; /* Align to top */
+    align-items: center;
+    padding: 20px;
+    min-height: calc(100vh - 64px);
+    background-color: var(--light-color);
+}
+
+.appointments-card {
+    max-width: 900px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 25px;
+    background: var(--background-color);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+}
+
+.appointments-card mat-card-header {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 25px;
+}
+
+.appointments-card mat-card-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+    text-align: center;
+}
+
+.appointments-card mat-card-subtitle {
+    font-size: 16px;
+    color: var(--secondary-color);
+    margin-top: 5px;
+    text-align: center;
+}
+
+.appointment-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.info-section {
+    background-color: var(--section-bg);
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-section.full-width-section {
+    grid-column: 1 / -1;
+}
+
+.wide-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
     box-sizing: border-box;
+}
+.wide-textarea textarea {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 1.1em;
+    padding: 14px 16px;
+}
+
+.info-section h3 {
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px dashed var(--border-color);
+}
+
+.info-section h3 mat-icon {
+    margin-right: 10px;
+    color: var(--primary-color);
+    font-size: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group-inline {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.form-group-inline .half-width {
+    flex: 1 1 calc(50% - 7.5px);
+    min-width: 150px;
+}
+
+.form-group mat-form-field {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+mat-checkbox {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    padding-left: 5px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.button-container button {
+    padding: 10px 25px;
+    font-size: 15px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.button-container button mat-icon {
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+button[mat-raised-button][color="primary"] {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+button[mat-raised-button][color="primary"]:hover {
+    background-color: #0056b3;
+    transform: translateY(-1px);
+}
+
+button[mat-button] {
+    color: var(--secondary-color);
+}
+
+button[mat-button]:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.loading-container,
+.error-message,
+.success-message {
+    text-align: center;
+    margin-top: 30px;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 600px;
+    width: 100%;
+}
+
+.loading-container {
+    background-color: var(--light-color);
+    color: var(--dark-color);
+}
+
+.error-message {
+    color: var(--danger-color);
+    background-color: #ffebee;
+}
+
+.error-message mat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--danger-color);
+}
+
+.success-message {
+    color: var(--success-color);
+    background-color: #e6ffed;
+}
+
+.success-message mat-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: var(--success-color);
+}
+
+@media (max-width: 768px) {
+    .appointments-card {
+        padding: 15px;
+        margin: 15px auto;
+    }
+    .appointments-card mat-card-title {
+        font-size: 24px;
+        padding-bottom: 10px;
+    }
+    .appointment-form-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .info-section {
+        padding: 15px;
+    }
+    .info-section .wide-textarea {
+        width: 100%;
+    }
+    .wide-textarea textarea {
+        width: 100%;
+        min-width: 100%;
+        box-sizing: border-box;
+    }
+    .info-section h3 {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    .form-group {
+        gap: 10px;
+    }
+    .form-group-inline {
+        flex-direction: column;
+    }
+    .form-group-inline .half-width {
+        flex: 1 1 100%;
+    }
+    .button-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    .button-container button {
+        width: 100%;
+    }
 }
 
 .appointments-card { /* Using this class as it appears in your form HTML */
@@ -71,6 +296,35 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 30px;
   margin-bottom: 30px;
+}
+
+/* ⭐ NEW / MODIFIED: Make the mat-form-field and textarea wider ⭐ */
+.wide-textarea {
+  width: 100%; /* Make the mat-form-field take the full width of its grid column */
+}
+
+.wide-textarea textarea {
+  width: 100%; /* Make the textarea take the full width of its mat-form-field */
+  min-width: 100%; /* Ensures it doesn't shrink below 100% */
+  box-sizing: border-box; /* Include padding and border in the element's total width */
+}
+
+
+/* Make the description (wide-textarea) box wider and more prominent */
+.wide-textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 100% !important;
+  box-sizing: border-box;
+}
+.wide-textarea textarea {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box;
+  resize: vertical;
+  font-size: 1.1em;
+  padding: 14px 16px;
 }
 
 /* Info section styling */
@@ -211,6 +465,10 @@ button[mat-button]:hover {
   .appointment-form-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+  
+  .info-section.full-width-section {
+    grid-column: auto; /* Revert explicit span on single column layout */
   }
 
   .info-section {

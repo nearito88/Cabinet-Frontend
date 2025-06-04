@@ -1,85 +1,130 @@
 <mat-card class="invoice-pay-card">
-    <mat-card-header>
-      <mat-card-title>PROCESS INVOICE PAYMENT</mat-card-title>
-      <mat-card-subtitle>Apply a payment to Invoice #{{ invoiceId }}</mat-card-subtitle>
-    </mat-card-header>
-  
-    <mat-card-content>
-      <div *ngIf="isLoading && !invoice" class="loading-container">
-        <mat-spinner diameter="40"></mat-spinner>
-        <p>Loading invoice details...</p>
-      </div>
-  
-      <div *ngIf="errorMessage && !isLoading" class="error-message">
-        <mat-icon>error_outline</mat-icon> {{ errorMessage }}
-      </div>
-  
-      <div *ngIf="invoice && !isLoading">
-        <div class="invoice-summary">
-          <p><strong>Patient:</strong> {{ invoice.patientName }}</p>
-          <p><strong>Appointment Date:</strong> {{ invoice.appointmentDate }}</p>
-          <p><strong>Total Amount:</strong> {{ invoice.totalAmount | currency:'MAD':'symbol':'1.2-2' }}</p>
-          <p><strong>Paid Amount:</strong> {{ invoice.paidAmount | currency:'MAD':'symbol':'1.2-2' }}</p>
-          <p><strong>Remaining Amount:</strong> {{ calculateRemainingAmount() | currency:'MAD':'symbol':'1.2-2' }}</p>
-          <p><strong>Status:</strong>
-            <mat-chip-listbox>
-              <mat-chip [color]="invoice.invoiceStatus === 'Paid' ? 'primary' : 'warn'" selected>
-                {{ invoice.invoiceStatus }}
-              </mat-chip>
-            </mat-chip-listbox>
-          </p>
+  <mat-card-header>
+    <mat-card-title>PROCESS INVOICE PAYMENT</mat-card-title>
+    <mat-card-subtitle>Apply a payment for Appointment #{{ appointment.appointmentId }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+
+    <div *ngIf="isLoading && !invoice" class="loading-container">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Loading appointment details...</p>
+    </div>
+
+    <div *ngIf="errorMessage && !isLoading" class="error-message">
+      <mat-icon>error_outline</mat-icon> {{ errorMessage }}
+    </div>
+
+    <div *ngIf="appointment && !isLoading && !errorMessage">
+      <div class="appointment-summary">
+        <p><strong>Patient:</strong> {{ appointment.patientName }}</p>
+        <p><strong>Appointment Date:</strong> {{ appointment.dateAppointment | date:'mediumDate' }}</p>
+        <p><strong>Service:</strong> {{ appointment.serviceName }}</p>
+        <p><strong>Total Amount:</strong> {{ appointment.totalAmount | currency:'MAD':'symbol':'1.2-2' }}</p>
+        <p><strong>Already Paid:</strong> {{ (appointment.paidAmount || 0) | currency:'MAD':'symbol':'1.2-2' }}</p>
+        <div class="payment-summary">
+          <p><strong>Remaining to Pay:</strong> {{ (appointment.totalAmount - (appointment.paidAmount || 0)) | currency:'MAD':'symbol':'1.2-2' }}</p>
         </div>
-  
-        <form class="payment-form-grid" [formGroup]="paymentForm">
-          <div class="info-section">
-            <h3><mat-icon>payment</mat-icon> Payment Details</h3>
-            <div class="form-group">
-              <mat-form-field appearance="outline">
-                <mat-label>Payment Amount (MAD)</mat-label>
-                <input matInput type="number" formControlName="paymentAmount" required min="0.01"
-                       [max]="calculateRemainingAmount()" (input)="onPaymentAmountChange($event)">
-                <mat-error *ngIf="f['paymentAmount'].hasError('required') && f['paymentAmount'].touched">
-                  Payment amount is required
-                </mat-error>
-                <mat-error *ngIf="f['paymentAmount'].hasError('min') && f['paymentAmount'].touched">
-                  Amount must be positive
-                </mat-error>
-                <mat-error *ngIf="f['paymentAmount'].hasError('max') && f['paymentAmount'].touched">
-                  Amount cannot exceed remaining {{ calculateRemainingAmount() | currency:'MAD':'symbol':'1.2-2' }}
-                </mat-error>
-              </mat-form-field>
-  
-              <mat-form-field appearance="outline">
-                <mat-label>Payment Type</mat-label>
-                <mat-select formControlName="paymentType" required>
-                  <mat-option *ngFor="let type of paymentTypes" [value]="type">
-                    {{ type | titlecase }}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="f['paymentType'].hasError('required') && f['paymentType'].touched">
-                  Payment type is required
-                </mat-error>
-              </mat-form-field>
-            </div>
+      </div>
+
+      <form class="payment-form-grid" [formGroup]="paymentForm">
+        <div class="info-section">
+          <h3><mat-icon>payment</mat-icon> Payment Details</h3>
+
+          <div class="form-group">
+            <mat-form-field appearance="outline">
+              <mat-label>Payment Amount (MAD)</mat-label>
+              <input matInput type="number" formControlName="paymentAmount" required min="0.01"
+                     [max]="(appointment.totalAmount - (appointment.paidAmount || 0))" (input)="onPaymentAmountChange($event)">
+              <mat-error *ngIf="f['paymentAmount'].hasError('required') && f['paymentAmount'].touched">
+                Payment amount is required
+              </mat-error>
+              <mat-error *ngIf="f['paymentAmount'].hasError('min')">
+                Amount must be positive
+              </mat-error>
+              <mat-error *ngIf="f['paymentAmount'].hasError('max') && f['paymentAmount'].value > (appointment.totalAmount - (appointment.paidAmount || 0))">
+                Amount exceeds remaining balance
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline">
+              <mat-label>Payment Type</mat-label>
+              <mat-select formControlName="paymentType" required>
+                <mat-option *ngFor="let type of paymentTypes" [value]="type">{{ type | titlecase }}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="f['paymentType'].hasError('required')">
+                Payment type is required
+              </mat-error>
+            </mat-form-field>
           </div>
-        </form>
-      </div>
-    </mat-card-content>
-  
-    <mat-card-actions *ngIf="paymentForm">
-      <div class="button-container">
-        <button mat-raised-button color="primary" (click)="processPayment()"
-                [disabled]="paymentForm.invalid || isLoading || invoice.invoiceStatus === 'Paid'">
-          <mat-icon>check_circle_outline</mat-icon> Process Payment
-        </button>
-        <button mat-button (click)="cancel()">
-          <mat-icon>close</mat-icon> Cancel
-        </button>
-      </div>
-    </mat-card-actions>
-  </mat-card>
-  
-  <div *ngIf="isLoading && invoice" class="loading-overlay">
-    <mat-spinner diameter="40"></mat-spinner>
-    <p>Processing payment...</p>
-  </div>
+        </div>
+
+        <div class="product-selection-section">
+          <h3><mat-icon>inventory_2</mat-icon> Products for Invoice</h3>
+
+          <div class="add-product-controls">
+            <mat-form-field appearance="outline" class="product-select-field">
+              <mat-label>Select Product</mat-label>
+              <mat-select [(ngModel)]="selectedProductId" [ngModelOptions]="{standalone: true}">
+                <mat-option *ngFor="let product of products" [value]="product.productId">
+                  {{ product.productName }} ({{ product.quantity }})
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="quantity-field">
+              <mat-label>Quantity</mat-label>
+              <input matInput type="number" [(ngModel)]="selectedQuantity" [ngModelOptions]="{standalone: true}" min="1">
+            </mat-form-field>
+
+            <div class="stock-info" *ngIf="selectedProductId">
+              <ng-container *ngIf="getAvailableStock(selectedProductId) !== undefined">
+                Available: <strong>{{ getAvailableStock(selectedProductId) }}</strong>
+              </ng-container>
+              <ng-container *ngIf="getQuantityInCart(selectedProductId) > 0">
+                (In cart: <strong>{{ getQuantityInCart(selectedProductId) }}</strong>)
+              </ng-container>
+            </div>
+
+            <button mat-raised-button color="accent" (click)="addProduct()"
+                    [disabled]="!selectedProductId || selectedQuantity < 1">
+              <mat-icon>add</mat-icon> Add
+            </button>
+          </div>
+
+          <div *ngIf="usedProducts.length > 0" class="selected-products-list">
+            <h4>Selected Products:</h4>
+            <mat-chip-listbox aria-label="Selected products">
+              <mat-chip-row *ngFor="let product of usedProducts; let i = index">
+                {{ product.productName }} ({{ product.quantity }} pcs)
+                <button matChipRemove (click)="removeProduct(i)" aria-label="Remove product">
+                  <mat-icon>cancel</mat-icon>
+                </button>
+              </mat-chip-row>
+            </mat-chip-listbox>
+          </div>
+          <div *ngIf="usedProducts.length === 0" class="no-products-message">
+            No products added yet.
+          </div>
+        </div>
+      </form>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions *ngIf="appointment && paymentForm">
+    <div class="button-container">
+      <button mat-raised-button color="primary" (click)="processPayment()"
+              [disabled]="paymentForm.invalid || isLoading || usedProducts.length === 0">
+        <mat-icon>check_circle_outline</mat-icon> Process Payment
+      </button>
+      <button mat-button (click)="cancel()">
+        <mat-icon>close</mat-icon> Cancel
+      </button>
+    </div>
+  </mat-card-actions>
+</mat-card>
+
+<div *ngIf="isLoading && invoice" class="loading-overlay">
+  <mat-spinner diameter="40"></mat-spinner>
+  <p>Processing payment...</p>
+</div>

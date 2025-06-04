@@ -77,6 +77,23 @@
   .info-section.full-width-section {
     grid-column: 1 / -1; /* Make this section span all columns */
   }
+
+  /* Make the description (wide-textarea) box wider and more prominent */
+  .wide-textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 100% !important;
+    box-sizing: border-box;
+  }
+  .wide-textarea textarea {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    resize: vertical;
+    font-size: 1.1em;
+    padding: 14px 16px;
+  }
   
   .info-section h3 {
     display: flex;
@@ -230,6 +247,19 @@
   
     .info-section {
       padding: 15px;
+    }
+    
+    .info-section .wide-textarea { /* Targeting it within .info-section for specificity */
+      width: 100%;
+    }
+    
+    /* Ensure the textarea element inside that mat-form-field takes full width */
+    .wide-textarea textarea {
+      width: 100%;
+      min-width: 100%; /* Ensures it always takes 100% width, preventing shrinking */
+      box-sizing: border-box; /* Essential: includes padding and border in the element's total width */
+      /* You can also set a min-height here if rows isn't enough or for visual consistency */
+      /* min-height: 120px; */
     }
   
     .info-section h3 {

@@ -253,6 +253,11 @@
     background-color: var(--status-scheduled-bg);
     color: var(--status-scheduled-text);
   }
+
+  th, td {
+    text-align: center;
+    min-width: 120px; /* ou plus si tu veux */
+  }  
   
   .status-completed {
     background-color: var(--status-completed-bg);
@@ -399,9 +404,16 @@
       padding: 0 10px;
   }
   .mat-column-totalAmount {
-      width: 70px;
+      width: 110px;
       min-width: 60px;
-      text-align: right;
+      text-align: center;
+  }
+  .mat-column-paidAmount {
+    width: 110px;
+    min-width: 60px;
+    text-align: center;
+    font-weight: bold;
+    color: #2e7d32; /* Teinte verte pour le montant payé */
   }
   
   /* Responsive adjustments */

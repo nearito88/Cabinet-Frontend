@@ -1,7 +1,11 @@
+import { CabinetService } from "./cabinet-service";
+import { Invoice } from "./invoice";
+import { Service } from "./service";
+
 export interface Appointment {
     appointmentId?: string; // Matches backend's AppointmentId
     patientId: string | null;   // <--- CHANGE THIS TO string | null
-    serviceId: string | null;   // <--- CHANGE THIS TO string | null
+    serviceId?: string | null;   // <--- CHANGE THIS TO string | null
     doctorId : string | null; 
     dateAppointment: Date | string; // <--- Allow both Date object and string
     startTime: string;     // Matches backend's StartTime (new naming)
@@ -10,8 +14,14 @@ export interface Appointment {
     paymentStatus: 'PENDING' | 'PARTIALLY_PAID' | 'PAID' | 'CANCELLED';
     description: string;   // Matches backend's Description (new naming, replaces 'reason')
     totalAmount: number;   // Matches backend's TotalAmount (new)
+    paidAmount?: number;    // Matches backend's PaidAmount (new)
     isRelated: boolean;    // Matches backend's isRelated (new) 
     invoiceId?: string; // This will hold the invoiceId from the backend
+
+    isCustomPrice: boolean;
+    services: CabinetService[] ;
+    invoices?: Invoice[];
+
 
     // These are typically derived or fetched separately on the frontend,
     // but if your backend DTO includes them, keep them.
