@@ -202,6 +202,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const todayFormatted = today.toISOString().split('T')[0];
     const currentMonth = today.getMonth() + 1;
     const currentYear = today.getFullYear();
+    console.log('DEBUG DASHBOARD: Frontend\'s "Today" date for filtering:', todayFormatted);
+
 
     forkJoin({
       patients: this.patientService.getAllPatients().pipe(
@@ -283,31 +285,51 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         // --- 3. Inventory Alerts ---
         if (products) {
-          this.inventoryAlertsList = products.filter(p => p.quantity < 10) // Example: low stock below 10
+          this.inventoryAlertsList = products
+            // ⭐ MODIFIED FILTER: Use p.minimum for filtering ⭐
+            .filter(p => p.quantity !== undefined && p.minimum !== undefined && p.quantity <= p.minimum)
             .map(p => {
               let type: 'warning' | 'critical' | 'info' = 'info';
               let icon: string = 'info';
               let description: string = 'Stock needs review';
 
-              if (p.quantity < 5) { // Critical if below 5
-                type = 'critical';
-                icon = 'error';
-                description = 'Critical stock level';
-              } else if (p.quantity < 10) { // Warning if below 10
-                type = 'warning';
-                icon = 'warning';
-                description = 'Low stock alert';
+              // ⭐ Use p.minimum in alert logic ⭐
+              let alertThreshold = p.minimum || 0; // Ensure a default if minimum is null/undefined
+
+              if (p.quantity !== undefined && p.quantity <= alertThreshold) {
+                  // Out of stock is always critical
+                  if (p.quantity === 0) {
+                      type = 'critical';
+                      icon = 'error';
+                      description = `Out of Stock. Minimum: ${alertThreshold}.`;
+                  }
+                  // Critical if quantity is at or below 50% of the defined minimum
+                  else if (p.quantity <= alertThreshold / 2) {
+                      type = 'critical';
+                      icon = 'error';
+                      description = `Critical stock level. Minimum: ${alertThreshold}.`;
+                  }
+                  // Warning if quantity is below minimum but above critical threshold
+                  else {
+                      type = 'warning';
+                      icon = 'warning';
+                      description = `Low stock alert. Minimum: ${alertThreshold}.`;
+                  }
               }
+
               return {
                 id: p.productId || '',
                 itemName: p.productName || 'Unknown Product',
                 description: description,
                 quantity: p.quantity || 0,
                 type: type,
-                icon: icon
+                icon: icon,
+                minimum: alertThreshold // ⭐ Pass 'minimum' to the alert object for display ⭐
               };
             });
-        } else { if (!this.dashboardErrorMessage) this.dashboardErrorMessage = 'Failed to load product data for inventory.'; }
+        } else {
+            if (!this.dashboardErrorMessage) this.dashboardErrorMessage = 'Failed to load product data for inventory.';
+        }
 
 
         // Final loading state update

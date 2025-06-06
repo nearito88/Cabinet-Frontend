@@ -1,30 +1,57 @@
-/* src/app/patient-list/patient-list.component.css */
+/* Patient List Component Styles */
 
 .patient-list-container {
-  padding: 20px;
-  max-width: 1400px; /* This is the key for making it wider */
-  margin: 20px auto; /* Centers the container horizontally */
+  padding: 15px;
+  max-width: 99%;
+  margin: 10px auto;
   background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
 }
 
 .patient-list-header {
   display: flex;
-  justify-content: space-between; /* Pushes the title to the left and the button to the right */
-  align-items: center; /* Vertically aligns title and button */
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
   border-bottom: 1px solid #eee;
   padding-bottom: 15px;
+  flex-wrap: wrap;
+  gap: 15px;
 }
 
 .patient-list-title {
-  color: #3f51b5; /* Material primary color */
+  color: #3f51b5;
   margin: 0;
+  font-size: 1.5rem;
 }
 
-.action-button {
-  min-width: 150px;
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.search-field {
+  width: 250px;
+  font-size: 0.9em;
+}
+
+.search-field .mat-form-field-wrapper {
+  padding-bottom: 0;
+}
+
+.add-button {
+  white-space: nowrap;
+}
+
+.add-button .mat-icon {
+  margin-right: 4px;
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
 }
 
 /* Ensure no lingering filter styles */
@@ -86,12 +113,23 @@ table {
   border-collapse: collapse;
 }
 
+table {
+  min-width: 100%;
+  table-layout: auto;
+  white-space: nowrap;
+}
+
 table th,
 table td {
-  padding: 12px 20px;
+  padding: 8px 12px;
   border-bottom: 1px solid #eee;
   text-align: left;
   vertical-align: middle;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 table th {
@@ -157,17 +195,22 @@ table tr:nth-child(even) {
 }
 
 /* Patient Specific Column Widths */
-.mat-column-name { min-width: 150px; }
-.mat-column-cin { width: 120px; }
-.mat-column-age { width: 60px; text-align: center; }
-.mat-column-gender { width: 100px; }
-.mat-column-phone { width: 130px; }
-.mat-column-email { min-width: 200px; }
-.mat-column-status { width: 100px; text-align: center; }
-.mat-column-disease { min-width: 150px; }
-.mat-column-documentsCount, .mat-column-medicalHistoryCount { width: 80px; text-align: center; }
-.mat-column-insurance { min-width: 120px; }
-.mat-column-dateJoined { width: 120px; }
+.mat-column-name { width: 140px; }
+.mat-column-cin { width: 110px; }
+.mat-column-age { width: 50px; text-align: center; }
+.mat-column-gender { width: 80px; }
+.mat-column-phone { width: 110px; }
+.mat-column-email { width: 160px; }
+.mat-column-status { width: 80px; text-align: center; }
+.mat-column-disease { width: 140px; }
+.mat-column-documentsCount, 
+.mat-column-medicalHistoryCount { 
+  width: 60px; 
+  text-align: center; 
+}
+.mat-column-insurance { width: 100px; }
+.mat-column-dateJoined { width: 100px; }
+.mat-column-actions { width: 90px; }
 
 /* Styles for the status text within the table */
 .status-cell {
@@ -194,11 +237,64 @@ table tr:nth-child(even) {
 }
 
 
-/* Responsive adjustments for smaller screens (optional) */
+/* Responsive adjustments */
+@media (max-width: 1024px) {
+  .patient-list-container {
+    padding: 8px;
+    margin: 5px;
+    max-width: 100%;
+  }
+  
+  table th,
+  table td {
+    padding: 6px 8px;
+    font-size: 0.85em;
+  }
+  
+  .mat-column-name { width: 120px; }
+  .mat-column-email { width: 140px; }
+  .mat-column-disease { width: 120px; }
+  .mat-column-dateJoined { width: 90px; }
+}
+
 @media (max-width: 768px) {
   .patient-list-container {
-      padding: 10px;
-      margin: 10px;
+    padding: 5px;
+    margin: 2px;
+  }
+  
+  .patient-list-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 15px;
+  }
+  
+  .header-actions {
+    width: 100%;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .search-field {
+    width: 100%;
+  }
+  
+  .add-button {
+    width: 100%;
+    margin: 0;
+  }
+  
+  table th,
+  table td {
+    padding: 4px 6px;
+    font-size: 0.8em;
+  }
+  
+  .mat-column-name { width: 100px; }
+  .mat-column-cin { width: 90px; }
+  .mat-column-email { width: 120px; }
+  .mat-column-disease { display: none; }
+  .mat-column-insurance { display: none; }
   }
 
   .patient-list-header {
@@ -210,4 +306,3 @@ table tr:nth-child(even) {
       margin-top: 15px;
       width: 100%;
   }
-}

@@ -119,12 +119,30 @@ export class PatientListComponent implements OnInit, AfterViewInit {
 
   // ... (applyFilter, editPatient, deletePatient, navigateToPatientForm methods)
   applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement)?.value;
-    if (filterValue) {
-      this.dataSource.filter = filterValue.trim().toLowerCase();
-      if (this.dataSource.paginator) {
-        this.dataSource.paginator.firstPage();
-      }
+    const filterValue = (event.target as HTMLInputElement)?.value.trim().toLowerCase();
+    
+    this.dataSource.filterPredicate = (data: Patient, filter: string): boolean => {
+      if (!filter) return true;
+      
+      // Convert all searchable fields to lowercase strings, handling null/undefined
+      const name = (data.name || '').toLowerCase();
+      const cin = (data.cin || '').toLowerCase();
+      const phone = (data.phone || '').toLowerCase();
+      const email = (data.email || '').toLowerCase();
+      
+      // Search in multiple fields
+      return (
+        name.includes(filter) ||
+        cin.includes(filter) ||
+        phone.includes(filter) ||
+        email.includes(filter)
+      );
+    };
+    
+    this.dataSource.filter = filterValue;
+    
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
     }
   }
 

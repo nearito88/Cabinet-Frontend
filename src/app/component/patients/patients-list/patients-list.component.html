@@ -1,9 +1,16 @@
 <div class="patient-list-container">
   <div class="patient-list-header">
     <h2 class="patient-list-title">Patient List</h2>
-    <button mat-raised-button color="primary" (click)="navigateToPatientForm()" class="action-button">
-      <mat-icon>add</mat-icon> Add New Patient
-    </button>
+    <div class="header-actions">
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search patients</mat-label>
+        <input matInput placeholder="Search by name, CIN, or phone" (keyup)="applyFilter($event)">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <button mat-stroked-button color="primary" (click)="navigateToPatientForm()" class="add-button">
+        <mat-icon>person_add</mat-icon> New Patient
+      </button>
+    </div>
   </div>
 
   <div *ngIf="isLoading" class="loading-container">
@@ -16,6 +23,7 @@
   </div>
 
   <div class="table-container" *ngIf="!isLoading && !errorMessage && dataSource.data.length > 0">
+    
     <div class="mat-elevation-z8">
       <table mat-table [dataSource]="dataSource" matSort>
 

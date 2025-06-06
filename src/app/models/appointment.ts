@@ -1,6 +1,5 @@
 import { CabinetService } from "./cabinet-service";
 import { Invoice } from "./invoice";
-import { Service } from "./service";
 
 export interface Appointment {
     appointmentId?: string; // Matches backend's AppointmentId
